@@ -1,0 +1,364 @@
+{% extends 'plantillas/plantillas.html' %}
+
+            {% block plantilla %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="badge bg-primary">Plantilla Switch Cisco - Legacy</span>
+                <pre> <!-- Plantilla -->
+
+
+
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname {{ hostname }}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username admin privilege 15 secret {{ pass_n2comms }}
+!
+!
+*******************************
+***        TACACS           ***
+*******************************
+
+
+
+aaa new-model
+!
+!
+aaa group server tacacs+ Cirsa-Tacacs
+    server 10.0.30.80
+    server 10.133.9.4
+    server 10.130.98.4
+    server 10.152.21.4
+!
+aaa authentication login default local
+aaa authentication login console line
+aaa authentication login VTY group Cirsa-Tacacs local
+aaa authentication enable default enable none
+aaa authorization console
+aaa authorization config-commands
+aaa authorization exec default if-authenticated 
+aaa authorization exec VTY group Cirsa-Tacacs local if-authenticated 
+aaa authorization commands 1 VTY group Cirsa-Tacacs local if-authenticated 
+aaa authorization commands 15 VTY group Cirsa-Tacacs local if-authenticated 
+aaa accounting exec default start-stop group Cirsa-Tacacs
+aaa accounting commands 1 default start-stop group Cirsa-Tacacs
+aaa accounting commands 15 default start-stop group Cirsa-Tacacs
+!
+!
+!
+aaa session-id common
+
+
+*******************************
+***       ZONA HORARIA      ***
+*******************************
+
+clock timezone CET 1
+clock summer-time SummerCET recurring last Sun Mar 2:00 last Sun Oct 3:00
+
+
+system mtu routing 1500
+ip routing
+ip domain-name {{ hostname }}
+!
+!
+!
+archive
+    log config
+    logging enable
+    notify syslog contenttype plaintext
+    hidekeys
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+spanning-tree vlan 1-1005 priority 4096
+!
+vlan internal allocation policy ascending
+!
+
+*******************************
+***          SSH            ***
+*******************************
+
+
+ip ssh version 2
+
+crypto key generate rsa
+
+*******************************
+Poner largo de clave en 1024
+*******************************
+
+!
+
+*******************************
+***      Config Puertos     ***
+*******************************
+!
+interface GigabitEthernet1/0/1
+    description Alarma - {{ ips['ip_alar'] }}
+    switchport access vlan 22
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/2
+    description Cerradura - {{ ips['ip_cerr'] }}
+    switchport access vlan 22
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/3
+    description Grabador - {{ ips['ip_grab'] }}
+    switchport access vlan 22
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/4
+    description Comunicaciones
+    switchport access vlan 22
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/5
+    description PC Admincion - {{ ips['ip_pc_admicion'] }}
+    switchport access vlan 24
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface range GigabitEthernet1/0/6 - 12
+    description Usuarios
+    switchport access vlan 24
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/13
+    description LMS - IP: {{ ips['ip_lms'] }}
+    switchport access vlan 25
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/14
+    description PC Display IP: {{ ips['ip_pc_disp'] }}
+    switchport access vlan 25
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface range GigabitEthernet1/0/15 - 18
+    description Produccion
+    switchport access vlan 25
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/19
+    description Cajero Intimus IP: {{ ips['ip_caj'] }}
+    switchport access vlan 29
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface range GigabitEthernet1/0/20 - 22
+    description RedTerceros
+    switchport access vlan 29
+    switchport mode access
+    switchport port-security maximum 2
+    switchport port-security
+    switchport port-security aging time 2
+    switchport port-security violation restrict
+    switchport port-security aging type inactivity
+    spanning-tree portfast
+    spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/23
+    description Conexion con Router Ppal 
+    switchport trunk encapsulation dot1q
+    switchport trunk native vlan 22
+    switchport trunk allowed vlan 22-29
+    switchport mode trunk
+    srr-queue bandwidth share 1 30 35 5
+    priority-queue out 
+    mls qos trust cos
+    auto qos trust 
+    spanning-tree link-type point-to-point
+!
+interface GigabitEthernet1/0/24
+    description Conexion con Router BKP 
+    switchport trunk encapsulation dot1q
+    switchport trunk native vlan 22
+    switchport trunk allowed vlan 22-29
+    switchport mode trunk
+    srr-queue bandwidth share 1 30 35 5
+    priority-queue out 
+    mls qos trust cos
+    auto qos trust 
+    spanning-tree link-type point-to-point
+!
+
+interface Vlan1
+    no ip address
+    shutdown
+!
+interface Vlan2
+    no ip address
+!
+interface Vlan22
+    description Comunicaciones 
+    ip address {{ ips['ip_vlan22'] }} 255.255.255.0
+    ip helper-address 10.3.0.201
+!
+interface Vlan23
+    description MMVVStreaming
+    ip address {{ ips['ip_vlan23'] }} 255.255.255.0
+    ip helper-address 10.3.0.201
+!
+interface Vlan24
+    description Usuarios
+    ip address {{ ips['ip_vlan24'] }} 255.255.255.0
+    ip helper-address 10.3.0.201
+!
+interface Vlan25
+    description Produccion
+    ip address {{ ips['ip_vlan25'] }} 255.255.255.0
+    ip helper-address 10.3.0.201
+!
+interface Vlan29
+    description RedTerceros
+    ip address {{ ips['ip_vlan29'] }} 255.255.255.0
+    ip helper-address 10.3.0.201
+!
+ip default-gateway {{ ip_red }}
+ip classless
+ip route 0.0.0.0 0.0.0.0 {{ ip_red }}
+ip http server
+no ip http secure-server
+!
+ip tacacs source-interface Vlan22
+!
+
+
+
+**********************************
+***           SysLog           ***
+**********************************
+
+logging trap notifications
+logging source-interface Vlan2
+logging 10.146.67.20
+
+
+**********************************
+***            SNMP            ***
+**********************************
+
+!
+snmp-server group CIRSA v3 priv access 53
+snmp-server community cirsa RO 53
+snmp-server location {{ location }}
+snmp-server contact n2comms@cirsa.com
+
+
+
+tacacs-server host 10.0.30.80 key *T4c4cs*
+tacacs-server host 10.133.9.4 key *T4c4cs*
+tacacs-server host 10.130.98.4 key *T4c4cs*
+tacacs-server host 10.152.21.4 key *T4c4cs*
+tacacs-server directed-request
+!
+vstack
+!
+line con 0
+    password {{ pass_n2comms }}
+    logging synchronous
+    login authentication console
+line vty 0 4
+    logging synchronous
+    login authentication VTY
+    length 0
+    transport input ssh
+    transport output ssh
+line vty 5 15
+    logging synchronous
+    login authentication VTYflash
+    length 0
+    transport input ssh
+    transport output ssh
+!
+end
+
+**********************************
+***          GUARDAR           ***
+**********************************
+
+write
+                    
+                    
+
+
+                </pre>
+            </div>
+            {% endblock %}
+

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{%block bar_progres%} onload="startProgress()"{%endblock%}
+
+{% block cuerpo %}
+
+<div class="row g-1">
+    <div class="card text-white mb-3">
+        <div class="card-header">Auditoria FortiGate</div>
+        <div class="card-body">
+            <h5 class="card-title">Datos del archivo CONF</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><b>Versión Actual:</b> {{datos_archivo.ver_nueva}}</li>
+                
+                {% if datos_archivo.ver_nueva not in datos_archivo.version %}
+                <li class="list-group-item text-danger"><b>Versión Fichero:</b> {{datos_archivo.version}}   ❌ Error</li>
+                {%else%}
+                <li class="list-group-item"><b>Versión Fichero:</b> {{datos_archivo.version}}   ✅ OK</li>
+                {% endif %}
+                
+                <li class="list-group-item"><b>User:</b> {{datos_archivo.user}}</li>
+                <li class="list-group-item"><b>Host-Name:</b> {{datos_archivo.host_name}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row g-1 mb-3">
+    <h2>Puntuación para la aceptación: <b>{{puntaje_total}}</b></h2>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+            role="progressbar"
+            style="width: 0%;"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="100">
+            0%
+        </div>
+    </div>
+</div>
+
+
+<div class="row g-1">
+    <div class="card">
+        <div class="card-header">Revisión</div>
+        <div class="card-body">
+            <div class="row">
+                {% for item in dashboard_items %}
+                <div class="col-md-3">
+                    <div class="card text-white {% if item.status %}bg-success{% else %}bg-danger{% endif %} mb-3">
+                        <div class="card-header">{{ item.name }}</div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if item.status %}
+                                    ✅ OK
+                                {% else %}
+                                    ❌ Error
+                                {% endif %}
+                            </h5>
+                            {% if not item.status and item.errors %}
+                            <ul>
+                                {% for error in item.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{%block script_progress%}
+<script>
+    function startProgress() {
+        let progressBar = document.getElementById("progress-bar");
+        let width = 0;
+        let interval = setInterval(function() {
+            if (width >= {{puntaje_total}}) {
+                clearInterval(interval);
+            } else {
+                width++;
+                progressBar.style.width = width + "%";
+                progressBar.setAttribute("aria-valuenow", width);
+                progressBar.innerText = width + "%";
+
+                // Cambiar color según progreso
+                if (width < 61) {
+                    progressBar.className = "progress-bar progress-bar-striped progress-bar-animated bg-danger"; // Rojo (malo)
+                } else if (width < 81) {
+                    progressBar.className = "progress-bar progress-bar-striped progress-bar-animated bg-warning"; // Amarillo (medio)
+                } else if (width < 95) {
+                    progressBar.className = "progress-bar progress-bar-striped progress-bar-animated bg-info"; // Azul (bien)
+                } else {
+                    progressBar.className = "progress-bar progress-bar-striped progress-bar-animated bg-success"; // Verde (perfecto)
+                }
+            }
+        }, 25); // Aumenta cada 50ms (ajustable)
+    }
+</script>
+{%endblock%}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-8 mx-auto">
+            {%if home%}
+            <div class="card" style="margin: 50px;"> <!-- style="width: 18rem;" -->
+            <img src="/static/img/wall-e_Buscador.svg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <form action="/home" method="POST" class="input-group">
+                        <input type="text" name="buscar" class="form-control" placeholder="Buscar en Wall-E" aria-label="Buscar" aria-describedby="button-addon">
+                        <button class="btn btn-primary" type="submit" id="button-addon">Buscar</button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="card" style="margin: 50px;"> <!-- style="width: 18rem;" -->
+                <div class="card-body">
+                    <h5 class="card-title">Buscar {{busca_por}}</h5>
+                    <form action="/busqueda/{{buscar}}" method="POST" class="input-group">
+                        <input type="text" name="buscar" class="form-control" placeholder="Buscar Wall-E" aria-label="Buscar" aria-describedby="button-addon">
+                        <button class="btn btn-primary" type="submit" id="button-addon">Buscar</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+
+</div>
+{% endblock %}

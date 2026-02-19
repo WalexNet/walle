@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<div class="row g-3"> <div class="col-md-5">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-pencil-square me-2"></i>Nueva Tarea</span>
+                <span class="badge bg-warning text-dark">
+                    Siguiente: {{ siguiente_tecnico.nombre }}
+                </span>
+            </div>
+            <div class="card-body">
+                <form action="/crear_tarea" method="POST">
+                    <div class="row g-2">
+                        <input type="hidden" name="id_tecnico" value="{{ siguiente_tecnico.id }}">
+
+                        <div class="col-12 form-floating">
+                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título de la tarea" required>
+                            <label for="titulo">Título de la incidencia</label>
+                        </div>
+
+                        <div class="col-12 form-floating">
+                            <select class="form-select" id="prioridad" name="prioridad">
+                                <option value="Baja">Baja</option>
+                                <option value="Media" selected>Media</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Critica">Crítica</option>
+                            </select>
+                            <label for="prioridad">Prioridad</label>
+                        </div>
+
+                        <div class="col-12 form-floating">
+                            <textarea class="form-control" placeholder="Descripción detallada" id="descripcion" name="descripcion" style="height: 150px"></textarea>
+                            <label for="descripcion">Descripción</label>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-info d-flex align-items-center mt-2" role="alert">
+                                <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                <div>
+                                    Esta tarea será asignada automáticamente a: <strong>{{ siguiente_tecnico.nombre }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Asignar Tarea
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-people-fill me-2"></i>Rotación de Técnicos
+            </div>
+            <div class="card-body p-0">
+                
+                <ul class="list-group list-group-flush">
+                    {% for tecnico, conteo in tecnicos_con_carga %}
+                    {% set is_next = tecnico.id == siguiente_tecnico.id and not tecnico.de_vacaciones %}
+                    
+                    <li class="list-group-item d-flex justify-content-between align-items-center 
+                        {% if tecnico.de_vacaciones %} bg-danger-subtle {% elif tecnico.no_disponible %} bg-warning-subtle {% elif is_next %} border-start border-4 border-primary bg-primary-subtle {% endif %}">
+                        
+                        <div class="d-flex flex-column">
+                            <div class="fw-bold">
+                                <i class="bi bi-person-badge me-2"></i> {{ tecnico.nombre }}
+                            </div>
+                            
+                            <div class="mt-1">
+                                {% if tecnico.de_vacaciones %}
+                                    <span class="badge bg-danger"><i class="bi bi-airplane-fill"></i> VACACIONES</span>
+                                {% elif tecnico.no_disponible %}
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-skip-forward-fill"></i> SALTAR TURNO (Próxima Tarea)</span>
+                                {% endif %}
+                                
+                                {% if is_next %}
+                                    <span class="badge bg-primary ms-2">ASIGNACIÓN PENDIENTE (Mínima Carga) {{session.usuario}} </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-end d-flex align-items-center">
+                            <small class="text-muted me-3" style="font-size: 0.85rem;">Tareas: <span class="badge bg-secondary">{{ conteo }}</span></small>
+
+                            <form method="POST" action="{{ url_for('saltar_turno', tecnico_id=tecnico.id) }}" class="d-inline ms-2">
+                                <button type="submit" 
+                                        class="btn btn-sm {% if tecnico.no_disponible %} btn-warning {% else %} btn-outline-danger {% endif %}" 
+                                        title="{% if tecnico.no_disponible %} Reactivar para Turno {% else %} Saltar solo una vez {% endif %}"
+                                        {% if tecnico.de_vacaciones %} disabled {% endif %}
+                                        onclick="return confirm('¿Confirmar cambio de estado de disponibilidad para {{ tecnico.nombre }}?');">
+                                    {% if tecnico.no_disponible %}
+                                        <i class="bi bi-check-circle-fill"></i> Reactivar
+                                    {% else %}
+                                        <i class="bi bi-skip-forward"></i> Saltar Turno
+                                    {% endif %}
+                                </button>
+                            </form>
+                            
+                            <form method="POST" action="{{ url_for('alternar_vacaciones', tecnico_id=tecnico.id) }}" class="d-inline ms-2">
+                                <button type="submit" 
+                                        class="btn btn-sm {% if tecnico.de_vacaciones %} btn-success {% else %} btn-outline-success {% endif %}" 
+                                        title="{% if tecnico.de_vacaciones %} Volver de Vacaciones {% else %} Marcar de Vacaciones {% endif %}"
+                                        onclick="return confirm('¿Confirmar cambio de estado de vacaciones para {{ tecnico.nombre }}?');">
+                                    {% if tecnico.de_vacaciones %}
+                                        <i class="bi bi-sun-fill"></i> Volver
+                                    {% else %}
+                                        <i class="bi bi-airplane-fill"></i> Vacaciones
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                </div>
+            <div class="card-footer text-body-secondary">
+                <small><i class="bi bi-info-circle"></i> La asignación se realiza por: **Menor Carga** (Least-Assigned-First).</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-list-check me-2"></i>Últimas tareas asignadas
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Asignado a</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th class="text-center">Acción</th> </tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tarea in ultimas_tareas %}
+                            <tr>
+                                <td>#{{ tarea.id }}</td>
+                                <td>{{ tarea.titulo }}</td>
+                                <td>{{ tarea.tecnico_nombre }}</td>
+                                <td>{{ tarea.prioridad }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if tarea.estado == 'Cerrada' %} bg-success 
+                                        {% elif tarea.estado == 'Pendiente' %} bg-danger 
+                                        {% else %} bg-warning text-dark {% endif %}">
+                                        {{ tarea.estado }}
+                                    </span>
+                                </td>
+                                <td>{{ tarea.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
+                                
+                                <td class="text-center">
+                                    {% if tarea.estado != 'Cerrada' %}
+                                    <form method="POST" action="{{ url_for('cerrar_tarea', tarea_id=tarea.id) }}" class="d-inline">
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-success" 
+                                                title="Cerrar esta tarea"
+                                                onclick="return confirm('¿Está seguro de cerrar la tarea {{ tarea.id }}?');">
+                                            <i class="bi bi-check-circle-fill"></i> Cerrar
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                        <span class="text-success small">Finalizada</span>
+                                    {% endif %}
+                                </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

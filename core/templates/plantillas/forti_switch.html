@@ -1,0 +1,549 @@
+{% extends 'plantillas/plantillas.html' %}
+
+            {% block plantilla %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="badge bg-primary">Plantilla Forti Switch</span>
+                <pre> <!-- Plantilla -->
+Crear vlans
+***********
+
+config switch vlan
+    edit 10
+        set description "Red_Transito_WAN"
+    next
+    edit 20
+        set description "Red_Transito_INET"
+    next
+    edit 30
+        set description "Coms_Mgmt"
+    next
+    edit 40
+        set description "Seguridad"
+    next
+    edit 50
+        set description "MMVVStraming/VoIP"
+    next
+    edit 60
+        set description "Usuarios"
+    next
+    edit 70
+        set description "Proveedores"
+    next
+    edit 80
+        set description "Clientes"
+    next
+    edit 90
+        set description "Corporativa_Wifi"
+    next
+    edit 99
+        set description "Nativa"
+    next
+    edit 100
+        set description "Forward_Systems"
+    next
+end
+
+
+Configuraciones Trunk
+*********************
+
+config switch trunk
+    edit "TrunkMikrotik-1"
+        set description "Trunk To Mikrotik-1"
+        set members "port4"
+    next
+
+    edit "TrunkMikrotik-2"
+        set description "Trunk To Mikrotik-2"
+        set members "port5"
+    next
+
+    edit "AP-Port6"                     
+        set description "Trunk to AP 01"
+        set members "port6"             
+    next                                
+    edit "AP-Port7"                     
+        set description "Trunk to AP 02"
+        set members "port7"             
+    next                                
+end
+
+
+
+
+Asignar Vlan a los puertos
+**************************
+
+config switch interface
+    edit "port1"
+        set native-vlan 10
+        set allowed-vlans 10
+        set untagged-vlans 10
+        set auto-discovery-fortilink enable
+    next
+    edit "port2"
+        set native-vlan 10
+        set allowed-vlans 10
+        set untagged-vlans 10
+        set auto-discovery-fortilink enable
+    next
+    edit "port3"
+        set native-vlan 20
+        set allowed-vlans 20
+        set untagged-vlans 20
+        set auto-discovery-fortilink enable
+    next
+    edit "port8"
+        set native-vlan 40
+        set allowed-vlans 40
+        set untagged-vlans 40
+        set auto-discovery-fortilink enable
+    next
+    edit "port9"
+        set native-vlan 40
+        set allowed-vlans 40
+        set untagged-vlans 40
+        set auto-discovery-fortilink enable
+    next
+    edit "port10"
+        set native-vlan 40
+        set allowed-vlans 40
+        set untagged-vlans 40
+        set auto-discovery-fortilink enable
+    next
+    edit "port11"
+        set native-vlan 60
+        set allowed-vlans 50,60
+        set untagged-vlans 50,60
+        set auto-discovery-fortilink enable
+    next
+    edit "port12"
+        set native-vlan 60
+        set allowed-vlans 50,60
+        set untagged-vlans 50,60
+        set auto-discovery-fortilink enable
+    next
+    edit "port13"
+        set native-vlan 60
+        set allowed-vlans 50,60
+        set untagged-vlans 50,60
+        set auto-discovery-fortilink enable
+    next
+    edit "port14"
+        set native-vlan 60
+        set allowed-vlans 50,60
+        set untagged-vlans 50,60
+        set auto-discovery-fortilink enable
+    next
+    edit "port15"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port16"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port17"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port18"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port19"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port20"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port21"
+        set native-vlan 70
+        set allowed-vlans 70
+        set untagged-vlans 70
+        set auto-discovery-fortilink enable
+    next
+    edit "port22"
+        set native-vlan 100
+        set allowed-vlans 100
+        set untagged-vlans 100
+        set auto-discovery-fortilink enable
+    next
+    edit "port23"
+        set native-vlan 100
+        set allowed-vlans 100
+        set untagged-vlans 100
+        set auto-discovery-fortilink enable
+    next
+    edit "port24"
+        set native-vlan 100
+        set allowed-vlans 100
+        set untagged-vlans 100
+        set auto-discovery-fortilink enable
+    next
+    edit "port25"
+        set auto-discovery-fortilink enable
+    next
+    edit "port26"
+        set auto-discovery-fortilink enable
+    next
+    edit "port27"
+        set auto-discovery-fortilink enable
+    next
+    edit "port28"
+        set auto-discovery-fortilink enable
+    next
+    edit "internal"
+        set allowed-vlans 10,20,30,40,50,60,70,80,90,99-100
+        set stp-state disabled
+    next
+    edit "TrunkMikrotik-1"
+        set native-vlan 99
+        set allowed-vlans 10,20,30,40,50,60,70,80,90,99-100
+    next
+    edit "TrunkMikrotik-2"
+        set native-vlan 99
+        set allowed-vlans 10,20,30,40,50,60,70,80,90,99-100
+    next
+    edit "AP-Port6"            
+        set native-vlan 30     
+        set allowed-vlans 80,90      
+    next                       
+    edit "AP-Port7"            
+        set native-vlan 30     
+        set allowed-vlans 80,90      
+    next 
+end
+
+
+
+
+Asignar descriptions a los puertos
+**********************************
+
+config switch physical-port
+    edit "port1"
+        set description "Router FTTH VPN-IP"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port2"
+        set description "Router Backup Teldat 4G"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port3"
+        set description "Router INET"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port4"
+        set description "Trunk To Microtik PPAL IP: {{ ips['ip_mikrotik_PPAL']}}"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port5"
+        set description "Trunk To Microtik BCKP IP: {{ ips['ip_mikrotik_BCKP']}}"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port6"
+        set description "FortiAP"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port7"
+        set description "FortiAP"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port8"
+        set description "Seguridad"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port9"
+        set description "Seguridad"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port10"
+        set description "Seguridad"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port11"
+        set description "Usuarios+Voip"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port12"
+        set description "Usuarios+Voip"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port13"
+        set description "Usuarios+Voip"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port14"
+        set description "Usuarios+Voip"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port15"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port16"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port17"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port18"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port19"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port20"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port21"
+        set description "Proveedores"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port22"
+        set description "TPV IP: {{ ips['ip_TPV'] }}"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port23"
+        set description "PC Display IP: {{ ips['ip_PC_Display'] }}"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port24"
+        set description "LMS - FordwareSystem IP: {{ ips['ip_LMS'] }}"
+        set lldp-profile "default-auto-isl"
+        set speed auto
+    next
+    edit "port25"
+        set description "Puertos - SFP"
+        set lldp-profile "default-auto-isl"
+        set speed auto-module
+    next
+    edit "port26"
+        set description "Puertos - SFP"
+        set lldp-profile "default-auto-isl"
+        set speed auto-module
+    next
+    edit "port27"
+        set description "Puertos - SFP"
+        set lldp-profile "default-auto-isl"
+        set speed auto-module
+    next
+    edit "port28"
+        set description "Puertos - SFP"
+        set lldp-profile "default-auto-isl"
+        set speed auto-module
+    next
+    edit "internal"
+        set storm-control-mode disabled
+    next
+end
+    
+
+config system interface
+    edit "internal"
+        set mode dhcp
+        set allowaccess ping https ssh
+        set type physical
+        set secondary-IP enable
+        set defaultgw enable
+        config secondaryip
+            edit 1
+                set ip 192.168.1.99 255.255.255.0
+                set allowaccess ping https ssh
+            next
+        end
+    next
+    edit "Comms_Mgmt"
+        set ip {{ ips['ip_mgmt'] }} 255.255.255.224
+        set allowaccess ping https ssh snmp
+        set alias "managment"
+        set vlanid 30
+        set interface "internal"
+    next
+end
+
+
+
+****************************
+* Configuraciones Globales *
+****************************
+
+config system global
+    set hostname "{{ hostname }}"
+end
+
+config system dns
+    set primary 10.3.0.175
+    set secondary 10.3.0.176
+    set domain "central.cirsa.com"
+end
+
+config log syslogd setting
+    set status enable
+    set server "10.146.67.20"
+end
+
+config system ntp
+    config ntpserver
+        edit 1
+            set server "10.0.20.10"
+        next
+    end
+    set ntpsync enable
+end
+
+Configuracion de Rutas:
+***********************
+
+config router static
+    edit 1
+        set device "internal"
+        set dst 0.0.0.0 0.0.0.0
+        set gateway {{ ips['ip_ruta_statica'] }}
+    next
+end
+
+
+Config nueva TACACS
+*******************
+
+config user tacacs+
+    edit "ClearPass"
+        set key *T4c4cs*
+        set server "10.0.30.80"
+    next
+    edit "ClearPass4"
+        set key *T4c4cs*
+        set server "10.152.21.4"
+    next
+    edit "ClearPass2"
+        set key *T4c4cs*
+        set server "10.133.9.4"
+    next
+    edit "ClearPass3"
+        set key *T4c4cs*
+        set server "10.130.98.4"
+    next
+end
+
+config user group
+    edit "GR_ClearPass"
+        set member "ClearPass" "ClearPass4" "ClearPass2" "ClearPass3"
+    next
+end
+
+config system admin
+    edit "admin"
+        set accprofile "super_admin"
+        set password {{ pass_n2comms }}
+    next
+
+    edit "ADM_ClearPass"
+        set remote-auth enable
+        set accprofile "super_admin"
+        set wildcard enable
+        set remote-group "GR_ClearPass"
+    next
+end
+
+
+***************
+* Config snmp *
+***************
+
+config system snmp sysinfo
+    set contact-info "n2comms@cirsa.com"
+    set location "{{ location }}"
+    set status enable
+end
+
+
+habilitar el snmp y el icmp en la interfaz:
+*******************************************
+
+config system interface
+    edit internal
+    set allowaccess ping https ssh snmp
+end
+
+
+
+Crear la community para snmp V1 y snmp V2:
+****************************************
+
+config system snmp community
+    edit 1
+    set events cpu-high ent-conf-change fan-detect intf-ip ip-conflict llv l2mac log-full mem-low psu-status sensor-alarm sensor-fault tkmem-hb-oo-sync
+    config hosts
+    edit 1
+    set interface "internal"
+    set ip 10.146.67.18 255.255.255.255
+    next
+    end
+    set name "cirsa"
+    next
+end
+
+
+Crear el user para snmp V3:
+***************************
+
+config system snmp user
+    edit "tobeit"
+        set events cpu-high ent-conf-change fan-detect intf-ip ip-conflict llv l2mac log-full mem-low psu-status sensor-alarm sensor-fault tkmem-hb-oo-sync
+        set auth-proto sha1
+        set auth-pwd 6@34Ho4wGJew*           
+        set priv-proto aes128
+        set priv-pwd 9yv7c%3w8gZqt           
+    next
+end
+
+                </pre>
+            </div>
+            {% endblock %}
+
+
+

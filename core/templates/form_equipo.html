@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+    <div class="row g-1">
+        <form action="/add_modi_equipo/{{ id }}/{{ sede.id }}" method="post">
+            <div class="card" > <!-- Datos Equipos -->
+                <div class="card-header">
+                    Datos del Equipo
+                </div>
+                <div class="card-body">
+                    <div class="row g-1">
+                        <div class="col-3 p-1 card">
+                            <div class="form-floating"> <!-- IP -->
+                                <input  type="text" class="form-control" id="ip" placeholder="ip" name="ip" value="{{equipo.ip}}">
+                                <label for="ip" class="form-label">IP</label>
+                            </div>
+                            <div class="form-floating"> <!-- HOSTNAME -->
+                                <input  type="text" class="form-control" id="nombre" placeholder="Host Name" name="nombre" value="{{equipo.nombre}}">
+                                <label for="nombre" class="form-label">HostName</label>
+                            </div>
+                            <div class="form-floating"> <!-- MAC -->
+                                <input  type="text" class="form-control" id="mac" pattern="([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}" placeholder="mac" name="mac" value="{{equipo.mac}}">
+                                <label for="mac" class="form-label">MAC</label>
+                            </div>
+                            <div class="form-floating"> <!-- N SERIE -->
+                                <input  type="text" class="form-control" id="n_serie" placeholder="Numero de Serie" name="n_serie" value="{{equipo.n_serie}}">
+                                <label for="n_serie" class="form-label">Número de Serie</label>
+                            </div>
+                        </div>
+                        <div class="col-3 p-1 card">
+                            <div class="form-floating"> <!-- Gestion -->
+                                <input type="text" class="form-control" id="gestion" placeholder="gestion" name="gestion" value="{{equipo.gestion}}">
+                                <label for="gestion" class="form-label">Gestión</label>
+                            </div>
+                            <div class="form-floating"> <!-- PUERTO AL AP -->
+                                <input  type="text" class="form-control" id="port_sw_aps" placeholder="port_sw_aps" name="port_sw_aps" value="{{equipo.port_sw_aps}}">
+                                <label for="port_sw_aps" class="form-label">Puerto al AP</label>
+                            </div>
+                            <div class="form-floating"> <!-- SW AL AP -->
+                                <input  type="text" class="form-control" id="sw_to_ap" placeholder="sw_to_ap" name="sw_to_ap" value="{{equipo.sw_to_ap}}">
+                                <label for="sw_to_ap" class="form-label">SW al AP</label>
+                            </div>
+                            <div class="form-floating"> <!-- ROL -->
+                                <select name="id_rol" class="form-select" id="rol" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_rol}}" selected>{{equipo.rol}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+
+                                    {% for reg_rol in rol %}
+                                    <option value="{{ reg_rol.id }}">{{ reg_rol.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="rol">Rol</label>
+                            </div>
+                        </div>
+                        <div class="col-3 p-1 card">
+                            <div class="form-floating"> <!-- ESTADO CIRSA -->
+                                <select name="id_estado_cirsa" class="form-select" id="estado_cirsa" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_estado_cirsa}}" selected>{{equipo.estado_cirsa}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+                                    {% for reg_estado_cirsa in estado_cirsa %}
+                                    <option value="{{ reg_estado_cirsa.id }}">{{ reg_estado_cirsa.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="estado_cirsa">Estado Cirsa</label>
+                            </div>
+                            <div class="form-floating"> <!-- TIPO DISPOSITIVO -->
+                                <select name="id_tipo_dispositivo" class="form-select" id="tipo_dispositivo" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_tipo_dispositivo}}" selected>{{equipo.tipo}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+                                    {% for reg_tipo_dispositivo in tipo_dispositivo %}
+                                    <option value="{{ reg_tipo_dispositivo.id }}">{{ reg_tipo_dispositivo.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="tipo_dispositivo">Tipo Dispositivo</label>
+                            </div>
+                            <div class="form-floating"> <!-- FABRICANTE -->
+                                <select name="id_fabricante" class="form-select" id="fabricante" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_fabricante}}" selected>{{equipo.fabricante}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+                                    {% for reg_fabricante in fabricante %}
+                                    <option value="{{ reg_fabricante.id }}">{{ reg_fabricante.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="fabricante">Fabricante</label>
+                            </div>
+                            <div class="form-floating"> <!-- MODELO -->
+                                <select name="id_modelo" class="form-select" id="modelo" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_modelo}}" selected>{{equipo.modelo}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+                                    {% for reg_modelo in modelo %}
+                                    <option value="{{ reg_modelo.id }}">{{ reg_modelo.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="modelo">Modelo</label>
+                            </div>
+                        </div>
+                        <div class="col-3 p-1 card">
+                            <div class="form-floating"> <!-- TIPO ACCESO -->
+                                <select name="id_tipo_acceso" class="form-select" id="tipo_acceso" aria-label="Floating label select">
+                                    {% if breadcrumb_items[5] > 0 %}
+                                    <option value="{{equipo.id_tipo_acceso}}" selected>{{equipo.tipo_acceso}}</option>
+                                    {% else %}
+                                    <option value="0" selected>Sin Seleccionar</option>
+                                    {% endif %}
+                                    {% for reg_tipo_acceso in tipo_acceso %}
+                                    <option value="{{ reg_tipo_acceso.id }}">{{ reg_tipo_acceso.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="tipo_acceso">Tipo Acceso</label>
+                            </div>
+                            <div class="form-floating"> <!-- SEDE -->
+                                <select name="id_sede" disable class="form-select" id="sedes" aria-label="Floating label select">
+                                    <option value="{{ sede.id }}" selected>{{ sede.cod_sede }}, {{ sede.sede }}</option>
+                                </select>
+                                <label for="sedes">Sede</label>
+                            </div>
+                            <div class="form-floating"> <!-- IOS -->
+                                <input type="text" class="form-control" id="ios" placeholder="ios" name="ios" value="{{equipo.ios}}">
+                                <label for="ios" class="form-label">IOS</label>
+                            </div>
+                            <div class="form-floating"> <!-- RACK -->
+                                <input type="text" class="form-control" id="rack" placeholder="Rack Ubicacion" name="rack" value="{{equipo.rack}}">
+                                <label for="rack" class="form-label">Rack</label>
+                            </div>
+                        </div>
+                        <div class="row g-1"> <!-- COMENTARIOS -->
+                            <div class="col-12 p-1 card">
+                                <div class="col-12 form-floating"> 
+                                    <textarea class="form-control" placeholder="Comentarios" id="comentarios" name="comentarios" rows="4">{{equipo.comentarios}}</textarea>
+                                    <label for="comentarios">Comentarios</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 p-1 card"> <!-- FECHAS EOS -->
+                            <div class="row g-1"> 
+
+                                <div class="col-3 form-floating"> <!-- MNEMONICO TESA-->
+                                    <input  type="text" class="form-control" id="router" placeholder="Mnemonico TESA" name="router" value="{{equipo.router}}">
+                                    <label for="router" class="form-label">Mnemónico TESA</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 p-1 card"> <!-- Configuraciones -->
+                            <div class="row g-1 border" style="margin: 2px;"> <!-- Configuraciones -->
+                                <div class="col-1 "> <!-- TACACS -->
+                                    <div class="form-check">
+                                        <input {% if equipo.tacacs %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="tacacs" name="conf" value="tacacs">
+                                        <label class="form-check-label" for="tacacs">
+                                            TACACS
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- CATTOOLS -->
+                                    <div class="form-check">
+                                        <input {% if equipo.cattools %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="cattools" name="conf" value="cattools">
+                                        <label class="form-check-label" for="cattools">
+                                            Cattools
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- IP CATTOOLS -->
+                                    <div class="form-check">
+                                        <input {% if equipo.ip_cattools %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="ip_cattools" name="conf" value="ip_cattools">
+                                        <label class="form-check-label" for="ip_cattools">
+                                            IP Cattools
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- SNMP V3 -->
+                                    <div class="form-check">
+                                        <input {% if equipo.snmp_v3 %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="snmp_v3" name="conf" value="snmp_v3">
+                                        <label class="form-check-label" for="snmp_v3">
+                                            SNMP v3
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- CHECKMK -->
+                                    <div class="form-check">
+                                        <input {% if equipo.check_mk %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="check_mk" name="conf" value="check_mk">
+                                        <label class="form-check-label" for="check_mk">
+                                            CHECKMK
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-2 "> <!-- USR TESA ELIMINADO -->
+                                    <div class="form-check">
+                                        <input {% if equipo.eliminar_usr_locales %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="eliminar_usr_locales" name="conf" value="eliminar_usr_locales">
+                                        <label class="form-check-label" for="eliminar_usr_locales">
+                                            USR TESA Eliminado
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-2 "> <!-- USR LOCAL CREADO -->
+                                    <div class="form-check">
+                                        <input {% if equipo.crear_usr_local %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="crear_usr_local" name="conf" value="crear_usr_local">
+                                        <label class="form-check-label" for="crear_usr_local">
+                                            USR Local Creado
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-2 "> <!-- IP SYSLOG -->
+                                    <div class="form-check">
+                                        <input {% if equipo.ip_syslog %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="ip_syslog" name="conf" value="ip_syslog">
+                                        <label class="form-check-label" for="ip_syslog">
+                                            IP SYSLOG
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- SIN BANNER -->
+                                    <div class="form-check">
+                                        <input {% if equipo.sin_banner %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="sin_banner" name="conf" value="sin_banner">
+                                        <label class="form-check-label" for="sin_banner">
+                                            Sin Banner
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-2 "> <!-- LOOPBACK TESA -->
+                                    <div class="form-check">
+                                        <input {% if equipo.eliminar_loopback_telefonica %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="eliminar_loopback_telefonica" name="conf" value="eliminar_loopback_telefonica">
+                                        <label class="form-check-label" for="eliminar_loopback_telefonica">
+                                            Loopback TESA
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-2 "> <!-- ELIMINADO TELNET HTTP -->
+                                    <div class="form-check">
+                                        <input {% if equipo.eliminar_telnet_http %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="eliminar_telnet_http" name="conf" value="eliminar_telnet_http">
+                                        <label class="form-check-label" for="eliminar_telnet_http">
+                                            Eliminado Telnet y HTTP
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-1 "> <!-- Stack -->
+                                    <div class="form-check">
+                                        <input {% if equipo.stack %} checked {% endif %} 
+                                        class="form-check-input" type="checkbox" id="stack" name="conf" value="stack">
+                                        <label class="form-check-label" for="stack">
+                                            Stack
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                                <div class="d-grid gap-2 d-md-flex">
+                                    <a class="btn btn-outline-success btn-sm" href="/ficha_sede/{{ sede.id }}" role="button">Salir</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Reservado -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'tablas.html' %}
+
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <th scope="row">{{ registro.id }}</th>
+                    <td>{{ registro.nombre}}</td>
+                    {% if breadcrumb_items[2]=='Modelo' %}
+                        <td>{{ registro.end_of_sale}}</td>
+                        <td>{{ registro.end_of_sec_support}}</td>
+                        <td>{{ registro.end_of_hw_support}}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+

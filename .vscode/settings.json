@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "10.16.1.101",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "Marte (Director)",
+            "database": "marte",
+            "username": "postgres"
+        }
+    ]
+}

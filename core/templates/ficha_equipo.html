@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+    <div class="row g-1">
+        <div class="card" > <!-- Datos Equipo -->
+            <div class="card-header">
+                Datos del Equipo
+            </div>
+            <div class="card-body">
+                <div class="row g-1">
+                    <div class="col-3 p-1 card"> 
+                        <div class="form-floating"> <!-- IP -->
+                            <input readonly type="text" class="form-control" id="ip" placeholder="ip" name="ip" value="{{equipo.ip}}">
+                            <label for="ip" class="form-label">IP</label>
+                        </div>
+                        <div class="form-floating"> <!-- HOSTNAME -->
+                            <input readonly type="text" class="form-control" id="nombre" placeholder="Host Name" name="nombre" value="{{equipo.nombre}}">
+                            <label for="nombre" class="form-label">HostName</label>
+                        </div>
+                        <div class="form-floating"> <!-- MAC -->
+                            <input readonly type="text" class="form-control" id="mac" placeholder="mac" name="mac" value="{{equipo.mac}}">
+                            <label for="mac" class="form-label">MAC</label>
+                        </div>
+                        <div class="form-floating"> <!-- N SERIE -->
+                            <input readonly type="text" class="form-control" id="n_serie" placeholder="Numero de Serie" name="n_serie" value="{{equipo.n_serie}}">
+                            <label for="n_serie" class="form-label">Número de Serie</label>
+                        </div>
+                    </div>
+                    <div class="col-3 p-1 card"> 
+                        <div class="form-floating"> <!-- Gestion -->
+                            <input readonly type="text" class="form-control" id="gestion" placeholder="gestion" name="gestion" value="{{equipo.gestion}}">
+                            <label for="gestion" class="form-label">Gestión</label>
+                        </div>
+                        <div class="form-floating"> <!-- PUERTO AL AP -->
+                            <input readonly type="text" class="form-control" id="port_sw_aps" placeholder="port_sw_aps" name="port_sw_aps" value="{{equipo.port_sw_aps}}">
+                            <label for="port_SW_Aps" class="form-label">Puerto al AP</label>
+                        </div>
+                        <div class="form-floating"> <!-- SW AL AP -->
+                            <input readonly type="text" class="form-control" id="sw_to_ap" placeholder="sw_to_ap" name="sw_to_ap" value="{{equipo.sw_to_ap}}">
+                            <label for="sw_to_ap" class="form-label">SW al AP</label>
+                        </div>
+                        <div class="form-floating"> <!-- ROL -->
+                            <input readonly type="text" class="form-control" id="rol" placeholder="rol" name="rol" value="{{equipo.rol}}">
+                            <label for="rol" class="form-label">Rol</label>
+                        </div>
+                    </div>
+                    <div class="col-3 p-1 card">
+                        <div class="form-floating"> <!-- ESTADO CIRSA -->
+                            <input readonly type="text" class="form-control" id="estado_cirsa" placeholder="estado_cirsa" name="estado_cirsa" value="{{equipo.estado_cirsa}}">
+                            <label for="estado_cirsa" class="form-label">Estado en Cirsa</label>
+                        </div>
+                        <div class="form-floating"> <!-- TIPO DISPOSITIVO -->
+                            <input readonly type="text" class="form-control" id="tipo" placeholder="Tipo Dispositivo" name="tipo" value="{{equipo.tipo}}">
+                            <label for="tipo" class="form-label">Tipo Dispositivo</label>
+                        </div>
+                        <div class="form-floating"> <!-- FABRICANTE -->
+                            <input readonly type="text" class="form-control" id="fabricante" placeholder="Tipo fabricante" name="fabricante" value="{{equipo.fabricante}}">
+                            <label for="fabricante" class="form-label">Fabricante</label>
+                        </div>
+                        <div class="form-floating"> <!-- MODELO -->
+                            <input readonly type="text" class="form-control" id="modelo" placeholder="Modelo" name="modelo" value="{{equipo.modelo}}">
+                            <label for="modelo" class="form-label">Modelo</label>
+                        </div>
+                    </div>
+                    <div class="col-3 p-1 card">
+                        <div class="form-floating"> <!-- TIPO ACCESO -->
+                            <input readonly type="text" class="form-control" id="tipo_acceso" placeholder="tipo_acceso" name="tipo_acceso" value="{{equipo.tipo_acceso}}">
+                            <label for="tipo_acceso" class="form-label">Tipo Acceso</label>
+                        </div>
+                        <div class="form-floating"> <!-- SEDE -->
+                            <input readonly type="text" class="form-control" id="sede" placeholder="sede" name="sede" value="{{equipo.sede}}">
+                            <label for="sede" class="form-label">Sede</label>
+                        </div>     
+                        <div class="form-floating"> <!-- IOS -->
+                            <input readonly type="text" class="form-control" id="ios" placeholder="ios" name="ios" value="{{equipo.ios}}" maxlength="50">
+                            <label for="ios" class="form-label">IOS</label>
+                        </div>
+                        <div class="form-floating"> <!-- RACK -->
+                            <input readonly type="text" class="form-control" id="rack" placeholder="Rack Ubicacion" name="rack" value="{{equipo.rack}}">
+                            <label for="rack" class="form-label">Rack</label>
+                        </div>
+                    </div>
+                    <!-- COMENTARIOS -->
+                    <div class="row g-1">
+                        <div class="col-12 form-floating"> 
+                            <textarea readonly class="form-control" placeholder="Comentarios" id="comentarios" name="comentarios" rows="4">{{equipo.comentarios}}</textarea>
+                            <label for="comentarios">Comentarios</label>
+                        </div>
+                    </div>
+                    <!-- FECHAS EOS -->
+                    <div class="col-12 p-1 card">
+                        <div class="row g-1">
+                            <div class="col-3 form-floating"> <!-- EOS -->
+                                <input readonly type="date" class="form-control" id="end_of_sale" placeholder="Fecha" name="eos" value="{{equipo.modelo.end_of_sale}}">
+                                <label for="end_of_sale" class="form-label">End Of Sale</label>
+                            </div>
+                            <div class="col-3 form-floating"> <!-- EOSS -->
+                                <input readonly type="date" class="form-control" id="end_of_sec_support" placeholder="Fecha" name="eoss" value="{{equipo.modelo.end_of_sec_support}}">
+                                <label for="end_of_sec_support" class="form-label">End Of Security Support</label>
+                            </div>
+                            <div class="col-3 form-floating"> <!-- EOHWS -->
+                                <input readonly type="date" class="form-control" id="end_of_hw_support" placeholder="Fecha" name="eohws" value="{{equipo.modelo.end_of_hw_support}}">
+                                <label for="end_of_hw_support" class="form-label">End Of HW Support</label>
+                            </div>
+                            <div class="col-3 form-floating"> <!-- MNEMONICO TESA -->
+                                <input readonly type="text" class="form-control" id="router" placeholder="Mnemonico TESA" name="router" value="{{equipo.router}}">
+                                <label for="router" class="form-label">Mnemónico TESA</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 p-1 card"> <!-- Configuraciones -->
+                        <div class="row border g-1" style="margin: 2px;"> 
+                            <div class="col-1 "> <!-- TACACS -->
+                                <div class="form-check"> 
+                                    <input {% if equipo.tacacs %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="tacacs" name="tacacs" value="True">
+                                    <label class="form-check-label" for="tacacs">
+                                        TACACS
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- CATTOOLS -->
+                                <div class="form-check">
+                                    <input {% if equipo.cattools %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="cattools" name="cattools" value="True">
+                                    <label class="form-check-label" for="cattools">
+                                        Cattools
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- IP CATTOOLS -->
+                                <div class="form-check">
+                                    <input {% if equipo.ip_cattools==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="ip_cattools" name="ip_cattools" value="True">
+                                    <label class="form-check-label" for="ip_cattools">
+                                        IP Cattools
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- SNMP V3 -->
+                                <div class="form-check">
+                                    <input {% if equipo.snmp_v3==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="snmp_v3" name="snmp_v3" value="True">
+                                    <label class="form-check-label" for="snmp_v3">
+                                        SNMP v3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- CHECKMK -->
+                                <div class="form-check">
+                                    <input {% if equipo.check_mk==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="check_mk" name="check_mk" value="True">
+                                    <label class="form-check-label" for="check_mk">
+                                        CHECKMK
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-2 "> <!-- USR TESA ELIMINADO -->
+                                <div class="form-check">
+                                    <input {% if equipo.eliminar_usr_locales==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="eliminar_usr_locales" name="eliminar_usr_locales" value="True">
+                                    <label class="form-check-label" for="eliminar_usr_locales">
+                                        USR TESA Eliminado
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-2 "> <!-- USR LOCAL CREADO -->
+                                <div class="form-check">
+                                    <input {% if equipo.crear_usr_local==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="crear_usr_local" name="crear_usr_local" value="True">
+                                    <label class="form-check-label" for="crear_usr_local">
+                                        USR Local Creado
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-2 "> <!-- IP SYSLOG -->
+                                <div class="form-check">
+                                    <input {% if equipo.ip_syslog==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="ip_syslog" name="ip_syslog" value="True">
+                                    <label class="form-check-label" for="ip_syslog">
+                                        IP SYSLOG
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- SIN BANNER -->
+                                <div class="form-check">
+                                    <input {% if equipo.sin_banner==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="sin_banner" name="sin_banner" value="True">
+                                    <label class="form-check-label" for="sin_banner">
+                                        Sin Banner
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-2 "> <!-- LOOPBACK TESA -->
+                                <div class="form-check">
+                                    <input {% if equipo.eliminar_loopback_telefonica==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="eliminar_loopback_telefonica" name="eliminar_loopback_telefonica" value="True">
+                                    <label class="form-check-label" for="eliminar_loopback_telefonica">
+                                        Loopback TESA
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-2 "> <!-- ELIMINADO TELNET HTTP -->
+                                <div class="form-check">
+                                    <input {% if equipo.eliminar_telnet_http==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="eliminar_telnet_http" name="eliminar_telnet_http" value="True">
+                                    <label class="form-check-label" for="eliminar_telnet_http">
+                                        Eliminado Telnet y HTTP
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-1 "> <!-- Stack -->
+                                <div class="form-check">
+                                    <input {% if equipo.stack==True  %} checked {% endif %} 
+                                    disabled class="form-check-input" type="checkbox" id="stack" name="stack" value="True">
+                                    <label class="form-check-label" for="stack">
+                                        Stack
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer"> <!-- Botones de Ir a la sede, Ping, Ports y Modificar -->
+                <div class="row">
+                    <div class="col-6">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                            <a class="btn btn-outline-success btn-sm" href="/ficha_sede/{{ equipo.id_sede }}" role="button">Ir a la Sede</a>
+                            <a class="btn btn-outline-info btn-sm" href="/ficha_equipo/{{equipo.id}}/1" role="button">Ping</a>
+                            <a class="btn btn-outline-info btn-sm" href="/ficha_equipo/{{equipo.id}}/2" role="button">Ports</a>
+                            
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a class="btn btn-outline-warning btn-sm" href="/ficha_equipo/{{equipo.id}}/3" role="button">Shutdown Ports</a>
+                            <a class="btn btn-primary btn-sm" href="/add_modi_equipo/{{ equipo.id }}/{{ equipo.id_sede}}" role="button">Modificar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerta Ping y comando SSH -->
+        {% if ping %}
+            {% if ping[0] %} 
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="badge bg-primary">Pong Ok</span>
+                <pre>{{ping[1]}}</pre>
+            </div>
+            {% elif ping[1] %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="badge bg-danger">{{ping[1]}}</span>
+            </div>
+            {% elif puertos %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="badge bg-primary">Puertos Descripción</span>
+                <pre>{{puertos}}</pre>
+            </div>
+            {% elif shutdown %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="badge bg-primary">Resultado de poner pueros en shutdown</span>
+                <pre>{{shutdown}}</pre>
+            </div>
+            {% elif error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="badge bg-danger">{{error}}</span>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="card" > <!-- Configuracion de Vlan's -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 ">
+                        Configuracion de Vlan's
+                    </div>
+                    <div class="col-6"> <!-- Espacio Reservado -->
+                        
+                    </div>
+                </div>
+            </div>
+            <div clas="card-body">
+                <div class="row g-1">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class='bg-info-subtle' >
+                            <tr>
+                                <th>VLAN</th>
+                                <th>NOMBRE</th>
+                                <th>RED</th>
+                                <th>IP VLAN</th>
+                                <th>MASCARA</th>
+                                <th>CIDR</th>
+                                <th>IP DHCP-SERVER</th>
+                            </tr> 
+                        </thead>
+                        <body>
+                            {% for linea in equipo.vlanes %}
+                            <tr>
+                                <td>{{linea.vlan_name}}</td>
+                                <td>{{linea.descripcion}}</td>
+                                <td>{{linea.red}}</td>
+                                <td>{{linea.ip_vlan}}</td>
+                                <td>{{linea.mascara}}</td>
+                                <td>{{linea.cidr}}</td>
+                                <td>{{linea.dhcp_serv}}</td>
+
+                            </tr>
+                            {% endfor %}
+                        </body>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6 ">
+                        <!-- Informacion del lado Derecho del card-footer -->
+                    </div>
+                    <div class="col-6"> <!-- Nuevo -->
+                        <!-- Añadimos un nueva VLAN -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a data-bs-toggle="tooltip" title="Añade un nueva VLAN" class="btn btn-primary btn-sm" href="" role="button">Nuevo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" > <!-- Parents del Equipo -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 ">
+                        Parents del Equipo
+                    </div>
+                    <div class="col-6"> <!-- Espacio Reservado -->
+                        
+                    </div>
+                </div>
+            </div>
+            <div clas="card-body">
+                <div class="row g-1">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class='bg-info-subtle' >
+                            <tr>
+                                <th>PARENT</th>
+                                <th>ID_HOST</th>
+                                
+                            </tr> 
+                        </thead>
+                        <body>
+                            {% for linea in equipo.parent %}
+                            <tr>
+                                <td>{{linea.host_parent}}</td>
+                                <td>{{linea.id_host}}</td>
+                                
+
+                            </tr>
+                            {% endfor %}
+                        </body>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6 ">
+                        <!-- Informacion del lado Derecho del card-footer -->
+                    </div>
+                    <div class="col-6"> <!-- Nuevo -->
+                        <!-- Añadimos un nueva VLAN -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a data-bs-toggle="tooltip" title="Añade un nuevo Parent" class="btn btn-primary btn-sm" href="" role="button">Nuevo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wall-E the Origin</title>
+    <link rel="icon" href="/static/img/iconoapp.svg" type="image/svg+xml">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style> 
+        /* Fondo general alineado con el tema oscuro */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            background-color: #212529; /* Fondo oscuro estándar de Bootstrap Dark */
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Tarjeta Principal: Bordes redondeados y sombra suave (Smooth) */
+        .main-content {
+            width: 60%;
+            max-width: 900px;
+            border-radius: 20px;
+            /* Sombra difusa y elegante en lugar de dura */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            min-height: 450px;
+            margin: 40px auto;
+            overflow: hidden; /* Asegura que los hijos no se salgan de las curvas */
+        }
+
+        /* Panel Izquierdo (Logo) */
+        .company__info {
+            background-color: #008080; /* Tu color original */
+            /* Un degradado muy sutil para darle vida sin cambiar el color base */
+            background: linear-gradient(160deg, #008080 0%, #006060 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .company_title {
+            margin-top: 1.5em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Panel Derecho (Formulario) */
+        .login_form {
+            background-color: #004d4d; /* Tu color de fondo original */
+            color: #fff;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login_form h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        /* Inputs "Smooth": Sin bordes duros, fondo semitransparente */
+        .form__input {
+            width: 100%;
+            border: none;
+            background-color: rgba(0, 0, 0, 0.25); /* Oscuro translúcido */
+            border-radius: 10px; /* Curvas suaves */
+            padding: 15px;
+            outline: none;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            transition: all .3s ease;
+            font-size: 1rem;
+            border-left: 4px solid transparent; /* Preparado para el focus */
+        }
+
+        .form__input::placeholder {
+            color: #aab0c0;
+        }
+
+        /* Efecto al escribir */
+        .form__input:focus {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid #00ffcc; /* Pequeño detalle de luz al activar */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Botón estilo "Píldora" */
+        .btn {
+            display: block;
+            width: 100%;
+            border-radius: 50px;
+            color: #004d4d;
+            font-weight: 700;
+            text-transform: uppercase;
+            background-color: #fff;
+            border: none;
+            padding: 12px;
+            transition: all .3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #008080; /* Invierte a tu color principal */
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Alerta de error integrada */
+        .alert-custom {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-left: 4px solid #dc3545;
+            color: #ffcaced3;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .main-content { 
+                width: 95%; 
+                flex-direction: column;
+                min-height: auto;
+            }
+            .company__info { 
+                display: none; /* Ocultar logo en móviles para ahorrar espacio */
+            }
+            .login_form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body data-bs-theme="dark">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            
+            <div class="main-content">
+                <div class="col-md-5 company__info">
+                    <img src="/static/img/logo_login.gif" alt="Logo" class="img-fluid" style="max-width: 180px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+                    <h4 class="company_title">&hearts; Wall-e</h4>
+                </div>
+
+                <div class="col-md-7 login_form">
+                    
+                    <h2>Bienvenido</h2>
+
+                    <form action="/" method="post">
+                        
+                        {% if error %}
+                        <div class="alert-custom" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-3 fs-5"></i>
+                            <div>
+                                <strong>Error:</strong> {{ error }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <input type="text" name="username" id="username" class="form__input" placeholder="Usuario" required autocomplete="off">
+                        
+                        <input type="password" name="password" id="password" class="form__input" placeholder="Contraseña" required>
+                        
+                        <button type="submit" class="btn">Iniciar Sesión</button>
+                        
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

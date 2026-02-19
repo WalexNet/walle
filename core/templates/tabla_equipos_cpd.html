@@ -1,0 +1,16 @@
+{% extends 'tablas.html' %}
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <th scope="row">{{ registro.cod_sede }}</th>
+                    <td>{{ registro.ip}}</td>
+                    <td>{{ registro.tipo}}</td>
+                    <td>{{ registro.fabricante}}</td>
+                    <td>{{ registro.modelo}}</td>
+                    <td>{{ registro.rol}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+ 

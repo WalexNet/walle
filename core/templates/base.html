@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Wall-E the Origin</title>
+        <link rel="icon" href="/static/img/iconoapp.svg" type="image/svg+xml">
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/bootstrap-icons.min.css" rel="stylesheet">
+		<!-- https://icons.getbootstrap.com/ -->
+	</head>
+
+<!-- Multiple menu -->
+<style> 
+    /* Estilos generales del enlace en el navbar */
+    .navbar-nav .nav-link {
+        color: var(--bs-navbar-color); /* Color por defecto del tema */
+        transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+    /* Efecto hover en enlaces principales del navbar */
+    .navbar-nav .nav-link:hover {
+        color: var(--bs-primary); /* Usa el color primario de Bootstrap para resaltar */
+    }
+
+    /* Estilos para los menús desplegables */
+    .dropdown-menu {
+        border-radius: 0.5rem; /* Bordes redondeados */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175); /* Sombra suave */
+        padding: 0.5rem 0; /* Relleno interior */
+    }
+
+    /* Estilos para elementos dropend (menú anidado) */
+    .dropend .dropdown-toggle {
+        color: var(--bs-body-color); /* Color de texto normal */
+        margin-left: 0; /* Quitamos el margen excesivo */
+    }
+
+    /* Efecto hover en elementos del menú desplegable */
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: var(--bs-tertiary-bg); /* Fondo más suave al hacer hover */
+        color: var(--bs-primary); /* Texto resaltado al hacer hover */
+    }
+
+    /* Mostrar menús al pasar el ratón */
+    .dropdown .dropdown-menu {
+        display: none;
+    }
+    .dropdown:hover > .dropdown-menu,
+    .dropend:hover > .dropdown-menu {
+        display: block;
+        margin-top: 0; /* Se ajusta mejor sin el margin-top de 0.125em */
+        margin-left: 0; 
+    }
+
+    /* Posición del menú anidado en pantallas grandes */
+    @media screen and (min-width: 769px) {
+        .dropend:hover > .dropdown-menu {
+            position: absolute;
+            top: 0;
+            left: 100%;
+        }
+        .dropend .dropdown-toggle {
+            margin-left: 0; /* Aseguramos que no haya margen */
+        }
+    }
+</style>
+
+	<body data-bs-theme="dark" {%block bar_progres%}{%endblock%}>
+		<div class="container-fluid">
+            <!-- Título y nav -->
+            {% block navbar %}
+            <div class="row">
+                <div class="col mb-3">
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+                        <div class="container-fluid">
+                            <!--
+                            <button onclick="cambiarTema()" class="btn rounded-fill"><i id="dl-icon" class="bi bi-sun-fill"></i></button>
+                            -->
+                                <!-- LOGO -->
+                                <a class="navbar-brand d-flex align-items-center" href="/home">
+                                    <img src="/static/img/iconoapp.svg" alt="logo" width="30" class="me-2">
+                                    Wall-E
+                                </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <!-- Opciones -->
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item dropdown"> <!-- Inventario -->
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-boxes"></i> Inventario
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="nav-item dropend">
+                                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-building"></i> Sedes
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="/sedes">Listar</a></li>
+                                                    <li><a class="dropdown-item" href="/buscar_por/1">Buscar</a></li>
+                                                    <li><a class="dropdown-item" href="/add_modi_sede/0">Nueva Sede</a></li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="nav-item dropend">
+                                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-cpu"></i> Equipos
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="/equipos">Listar</a></li>
+                                                    <li><a class="dropdown-item" href="/buscar_por/2">Buscar</a></li>
+                                                </ul>
+                                            </li>
+
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="/contactos">Contactos</a></li>
+                                            <li><a class="dropdown-item" href="/modelo">Modelos</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">Movimientos</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li class="nav-item dropdown"> <!-- Plantillas -->
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-code-square"></i> Plantillas
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/plantilla/0">Huawei</a></li>
+                                            <li><a class="dropdown-item" href="/plantilla/1">Forti Switch</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="/plantilla/2">Huawei Legacy</a></li>
+                                            <li><a class="dropdown-item" href="/plantilla/3">Cisco 3560-CG</a></li>
+                                            <li><a class="dropdown-item" href="/plantilla/3">Cisco 2960</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-item"> <!-- IP-Calc -->
+                                        <a class="nav-link" aria-current="page" href="/ipcalc">
+                                            <i class="bi bi-calculator"></i> IP-Calc
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item"> <!-- Auditoria -->
+                                        <a class="nav-link" aria-current="page" href="/auditoria_upload">
+                                            <i class="bi bi-file-earmark-bar-graph"></i> Auditoria FW
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item"> <!-- Tareas -->
+                                        <a class="nav-link" aria-current="page" href="/asignacion_tareas">
+                                            <i class="bi bi-card-checklist"></i> Asignación de Tareas
+                                        </a>
+                                    </li>
+
+                                    <!-- Acceso al menu de Tablas Auxiliares -->
+                                    {% block sub_menu_auxiliares %}
+
+                                    {% endblock %}
+                                </ul>
+                                <!-- Session del usuario -->
+                                {% if session.get('autenticado') %}
+                                <div class="dropdown ms-2 me-3">
+                                    <a class="d-flex align-items-center px-2 py-1 border rounded-pill text-white"
+                                    href="#" data-bs-toggle="dropdown"
+                                    style="border-color:#6c757d; font-size:.75rem;">
+                                        <i class="bi bi-person-circle me-1"></i> {{ session.usuario }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item text-danger" href="/logout">
+                                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                                        </a></li>
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                <!-- Fin Session del usuario -->
+                                <form class="d-flex mb-1" role="search" action="/home" method="post"> <!-- Buscar -->
+                                    <input class="form-control me-2" type="search" placeholder="Buscar Wall-E" aria-label="Search", name="buscar">
+                                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            {% endblock %}
+
+            <!-- Mensajes de flash -->
+            <div class="row" style="margin-top: 45px;">
+                <div class="col-12">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message | safe }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            <!-- Fin mensajes de flash -->
+
+            <!-- Contenido cuerpo -->
+            <div class="col">
+                <div class="row">
+                    <!-- breadcrumb -->
+                    {%block breadcrumb%}
+                    <div class="col-6">
+                        <div class="row">
+                            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    {% for item in breadcrumb_items %}
+                                    <li class="breadcrumb-item">{{ item }}</li>
+                                    {% endfor %}
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    {%endblock%}
+
+                    {%block paginador%}
+                    {%endblock%}
+                </div>
+
+                {% block cuerpo %}
+                {% endblock %}
+            </div>
+
+            <!-- Pie de Pagina -->
+            <footer class="text-center text-lg-start">
+            <!-- Copyright -->
+                <div class="text-center p-3" style="background-color: hsla(0, 0%, 0%, 0.2);">
+                    <span class="badge text-bg-light">Wall-E - Versión 2.0.0</span> - WalexNET© 2023 - 
+                    <a href="">www.walex.net</a>
+                </div>
+            <!-- Copyright -->
+            </footer>
+        </div>
+
+        {%block script_progress%}
+        {%endblock%}
+        <script src="/static/js/bootstrap.bundle.min.js"></script>
+        <script src="/static/js/index.js"></script>
+    </body>
+</html>

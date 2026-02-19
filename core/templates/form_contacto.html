@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+    <div class="row g-1">
+        <form action="/add_modi_contacto/{{id_sede}}" method="post">
+            <div class="card"> <!-- Datos de contacto -->
+                <div class="card-header">
+                    Datos de contacto
+                </div>
+                <div class="card-body">
+                    <div class="row g-1">
+                        <div class="col-12 form-floating">
+                            <input  type="text" class="form-control" id="responsable_cirsa" placeholder="Persona responsable Cirsa" name="responsable_cirsa" value="{{contactos.responsable_cirsa}}">
+                            <label for="responsable_cirsa" class="form-label">Responsable Cirsa</label>
+                        </div>
+
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="persona_contacto_cirsa" placeholder="Persona Contacto Cirsa" name="persona_contacto_cirsa" value="{{contactos.persona_contacto_cirsa}}">
+                            <label for="persona_contacto_cirsa" class="form-label">Persona Contacto Cirsa</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="persona_contacto_sala" placeholder="Persona Contacto Sala" name="persona_contacto_sala" value="{{contactos.persona_contacto_sala}}">
+                            <label for="persona_contacto_sala" class="form-label">Persona Contacto Sala</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="persona_mantenimiento" placeholder="Persona Mantenimieto Sala" name="persona_mantenimiento" value="{{contactos.persona_mantenimiento}}">
+                            <label for="persona_mantenimiento" class="form-label">Persona Mantenimieto Sala</label>
+                        </div>
+
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="tel_contacto_cirsa" placeholder="Tel Contacto Cirsa" name="tel_contacto_cirsa" value="{{contactos.tel_contacto_cirsa}}">
+                            <label for="tel_contacto_cirsa" class="form-label">Tel Contacto Cirsa</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="tel_contacto_sala" placeholder="Tel Persona contacto de la Sala" name="tel_contacto_sala" value="{{contactos.tel_contacto_sala}}">
+                            <label for="tel_contacto_sala" class="form-label">Tel Contacto Sala</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input  type="text" class="form-control" id="tel_persona_mantenimiento" placeholder="Telefono Persona Mantenimieto Sala" name="tel_persona_mantenimiento" value="{{contactos.tel_persona_mantenimiento}}">
+                            <label for="tel_persona_mantenimiento" class="form-label">Teléfono Mantenimieto Sala</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                            <div class="col-6">
+                                <div class="d-grid gap-2 d-md-flex">
+                                    <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                                    <div class="d-grid gap-2 d-md-flex">
+                                        <a class="btn btn-outline-success btn-sm" href="/ficha_sede/{{id_sede}}" role="button">Salir</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Reservado -->
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

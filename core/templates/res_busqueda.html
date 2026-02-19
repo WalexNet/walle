@@ -1,0 +1,34 @@
+{% extends 'tablas.html' %}
+
+{% block paginador %}
+{% endblock %}
+
+
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    {%for field in encabezado %}
+                        {% if field == 'cod_sede' %}
+                            <td>
+                                <p><small><a href="/ficha_sede/{{ registro.id }}">{{ registro[field] }}</a></small></p>
+                            </td>
+                        {% elif field == 'sede' and buscar_por != 1 %}
+                            <td>
+                                <p><small><a href="/ficha_sede/{{ registro.id_sede }}">{{ registro[field] }}</a></small></p>
+                            </td>
+                        {% elif field == 'ip' %}
+                            <td>
+                                <p><small><a href="/ficha_equipo/{{ registro.id }}">{{ registro[field] }}</a></small></p>
+                            </td>
+                        {% else %}
+                            <td>
+                                <p><small>{{ registro[field] }}</small></p>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+            

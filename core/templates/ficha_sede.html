@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+    <div class="row g-1">
+        <div class="card" > <!-- Datos Principales de la sede -->
+            <div class="card-header">
+                Datos Principales de la sede
+            </div>
+            <div class="card-body">
+                <div class="row g-1">
+                    <div class="col-2 form-floating"> <!-- COD_SEDE -->
+                        <input readonly type="text" class="form-control form-control-sm" id="codsede" placeholder="codigo de sede" name="cod_sede" value="{{sede.cod_sede}}">
+                        <label for="codsede">Codigo Sede</label>
+                    </div>
+                    <div class="col-3 form-floating"> <!-- NOMBRE -->
+                        <input readonly type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre de la sede" name="nombre" value="{{sede.sede}}">
+                        <label for="nombre">Nombre</label>
+                    </div>
+                    <div class="col-3 form-floating"> <!-- EMPRESA -->
+                        <input readonly type="text" class="form-control form-control-sm" id="empresa" placeholder="Nombre de la Empresa" name="empresa" value="{{sede.empresa}}">
+                        <label for="empresa" class="form-label">Empresa</label>
+                    </div>
+                    <div class="col-2 form-floating"> <!-- CIF -->
+                        <input readonly type="text" class="form-control form-control-sm" id="cif" placeholder="CIF de la Empresa" name="cif" value="{{sede.cif}}">
+                        <label for="cif" class="form-label">CIF</label>
+                    </div>
+                    <div class="col-2 form-floating"> <!-- CECO -->
+                        <input readonly type="text" class="form-control form-control-sm" id="ceco" placeholder="Código CECO" name="ceco" value="{{sede.ceco}}">
+                        <label for="ceco" class="form-label">CECO</label>
+                    </div>
+
+                    <div class="col-6 form-floating"> <!-- DIRECCION -->
+                        <input readonly type="text" class="form-control form-control-sm" id="direccion" placeholder="Direción de la sede" name="direccion" value="{{sede.direccion}}">
+                        <label for="direccion" class="form-label">Dirección</label>
+                    </div>
+                    <div class="col-3 form-floating"> <!-- COOR_LAT -->
+                        <input readonly type="text" class="form-control" id="coor_lat" placeholder="08222" name="coor_lat" value="{{sede.coor_lat}}">
+                        <label for="coor_lat" class="form-label">Coordenada Latitud</label>
+                    </div>
+                    <div class="col-3 form-floating"> <!-- COOR_LON -->
+                        <input readonly type="text" class="form-control" id="coor_long" placeholder="08222" name="coor_lat" value="{{sede.coor_long}}">
+                        <label for="coor_long" class="form-label">Coordenada Longitud</label>
+                    </div>
+
+                    <div class="col-2 form-floating"> <!-- DIVISION -->
+                        <input readonly type="text" class="form-control" id="division" placeholder="08222" name="division" value="{{sede.division}}">
+                        <label for="division" class="form-label">División de la Sede</label>
+                    </div>       
+                    <div class="col-1 form-floating"> <!-- CIRCUITO -->
+                        <input readonly type="text" class="form-control" id="circuito" placeholder="Circuito" name="circuito" value="{{sede.circuito}}">
+                        <label for="circuito" class="form-label">Circuito</label>
+                    </div>
+                    <div class="col-2 form-floating"> <!-- PROVINCIA -->
+                        <input readonly type="text" class="form-control" id="provincia" placeholder="Provincia de la sede" name="provincia" value="{{sede.prov}}">
+                        <label for="provincia" class="form-label">Provincia de la Sede</label>
+                    </div>
+                    <div class="col-2 form-floating"> <!-- POBLACION -->
+                        <input readonly type="text" class="form-control" id="poblacion" placeholder="Población de la sede" name="division" value="{{sede.pob}}">
+                        <label for="poblacion" class="form-label">Población de la Sede</label>
+                    </div>
+                    <div class="col-2 form-floating"> <!-- TOPOLOGIA -->
+                        <input readonly type="text" class="form-control" id="topologia" placeholder="Tipo de Topologia" name="topologia" value="{{sede.topo.nombre}}">
+                        <label for="topologia" class="form-label">Tipo de Topologia</label>
+                    </div>
+                    <div class="col-3 form-floating"> 
+                        <textarea readonly class="form-control" placeholder="Descripcion Topologia" id="topodesc" name="topodesc" rows="4">{{sede.topo.descripcion}}</textarea>
+                        <label for="topodesc">Descripcion Topologia</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6 "> <!-- Boton Topología -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                            <a class="btn btn-outline-info btn-sm" href="" role="button" data-bs-toggle="tooltip" title="Funcion no Activada">
+                                <img src="/static/img/logo_lucid.svg" alt="Icono" width="22" height="22">Topología</a>
+                            <a class="btn btn-outline-info btn-sm" href="https://checkmk.central.cirsa.com/master/check_mk/index.py?start_url=%2Fmaster%2Fcheck_mk%2Fview.py%3F_show_filter_form%3D0%26filled_in%3Dfilter%26host_regex%3D{{sede.cod_sede}}%26view_name%3Dsearchhost" 
+                            target="_blank" role="button" data-bs-toggle="tooltip" title="Accede a los HOST de la sede en checkmk">
+                            <img src="/static/img/logo_checkmk.svg" alt="Icono" width="22" height="22">checkmk</a>
+                        </div>
+                    </div>
+                    <div class="col-6"> <!-- Botones Modificar y Nuevo -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            
+                            <a class="btn btn-primary btn-sm" href="/add_modi_sede/{{ sede.id }}"  role="button" data-bs-toggle="tooltip" title="Modifica/Actualiza los datos de la sede">Modificar</a>
+                            <a class="btn btn-primary btn-sm" href="/add_modi_sede/0"  role="button" data-bs-toggle="tooltip" title="Añade una nueva Sede">Nuevo</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card"> <!-- Datos de contacto -->
+            <div class="card-header">
+                Datos de contacto
+            </div>
+            <div class="card-body">
+                <div class="row g-1">
+                    {% if sede.id_contacto == 0 %}
+                    No hay contatos asociados a la Sede
+                    {% endif %}
+                    <div class="col-12 form-floating">
+                        <input readonly type="text" class="form-control" id="responsable_cirsa" placeholder="Persona responsable Cirsa" name="responsable_cirsa" value="{{sede.contacto.responsable_cirsa}}">
+                        <label for="responsable_cirsa" class="form-label">Responsable Cirsa</label>
+                    </div>
+
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="persona_contacto_cirsa" placeholder="Persona Contacto Cirsa" name="persona_contacto_cirsa" value="{{sede.contacto.persona_contacto_cirsa}}">
+                        <label for="persona_contacto_cirsa" class="form-label">Persona Contacto Cirsa</label>
+                    </div>
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="persona_contacto_sala" placeholder="Persona Contacto Sala" name="persona_contacto_sala" value="{{sede.contacto.persona_contacto_sala}}">
+                        <label for="persona_contacto_sala" class="form-label">Persona Contacto Sala</label>
+                    </div>
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="persona_mantenimiento" placeholder="Persona Mantenimieto Sala" name="persona_mantenimiento" value="{{sede.contacto.persona_mantenimiento}}">
+                        <label for="persona_mantenimiento" class="form-label">Persona Mantenimieto Sala</label>
+                    </div>
+
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="tel_contacto_cirsa" placeholder="Tel Contacto Cirsa" name="tel_contacto_cirsa" value="{{sede.contacto.tel_contacto_cirsa}}">
+                        <label for="tel_contacto_cirsa" class="form-label">Tel Contacto Cirsa</label>
+                    </div>
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="tel_contacto_sala" placeholder="Tel Persona contacto de la Sala" name="tel_contacto_cirsa" value="{{sede.contacto.tel_contacto_sala}}">
+                        <label for="tel_contacto_sala" class="form-label">Tel Contacto Sala</label>
+                    </div>
+                    <div class="col-4 form-floating">
+                        <input readonly type="text" class="form-control" id="tel_persona_mantenimiento" placeholder="Telefono Persona Mantenimieto Sala" name="tel_persona_mantenimiento" value="{{sede.contacto.tel_persona_mantenimiento}}">
+                        <label for="tel_persona_mantenimiento" class="form-label">Teléfono Mantenimieto Sala</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6"> <!-- Botones Modificar y Nuevo -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a class="btn btn-primary btn-sm" href="/add_modi_contacto/{{sede.id}}"  role="button" data-bs-toggle="tooltip" title="Añade un nuevo Contacto">Añade/Modifica</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card"> <!-- Circuitos contratados -->
+            <div class="card-header">
+                Datos de los Circuitos contratados
+            </div>
+            <div clas="card-body">
+                <div class="row g-1">
+                    {% if not sede.CircuitosDatos %}
+                    No Hay datos para mostrar
+                    {% endif %}
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class='bg-info-subtle' >
+                            <tr>
+                                <th>ADMINISTRATIVO</th>
+                                <th>TEL ROUTER</th>
+                                <th>VRF</th>
+                                <th>TIPO DE CIRCUITO</th>
+                                <th>ROL</th>
+                                <th>BW</th>
+                            </tr> 
+                        </thead>
+                        <body>
+                            {% for linea in sede.CircuitosDatos %}
+                            <tr>
+                                <td>{{linea.admin}}</td>
+                                <td>{{linea.tel_router}}</td>
+                                <td>{{linea.vrf}}</td>
+                                <td>{{linea.tipo_circuito}}</td>
+                                <td>{{linea.rol}}</td>
+                                <td>{{linea.bw}}</td>
+                            </tr>
+                            {% endfor %}
+                        </body>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6"> <!-- Botones Modificar y Nuevo -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {% if sede.CircuitosDatos %}
+                            <a class="btn btn-primary btn-sm" href=""  role="button" data-bs-toggle="tooltip" title="Modifica/Actualiza datos de Circuito Contratado">Modificar</a>
+                            {% endif %}
+                            <a class="btn btn-primary btn-sm" href=""  role="button" data-bs-toggle="tooltip" title="Añade un nuevo Circuito">Nuevo</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" > <!-- Electronica general de la sede -->
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 ">
+                        Switches y electronica general de la sede
+                    </div>
+                    <div class="col-6"> <!-- Pines -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a data-bs-toggle="tooltip" title="Envia Pines a los equipos de la sede" class="btn btn-outline-info btn-sm" href="/ficha_sede/{{sede.id}}/True" role="button">Pines</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div clas="card-body">
+                <div class="row g-1">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class='bg-info-subtle' >
+                            <tr>
+                                {% if ping %}
+                                    <th>PING</th>
+                                {% endif %}
+                                <th>IP</th>
+                                <th>HOSTNAME</th>
+                                <th>FABRICANTE</th>
+                                <th>ROL</th>
+                                <th>DISPOSITIVO</th>
+                                <th>N_SERIE</th>
+                                <th>MAC</th>
+                                <th>RACK</th>
+                                <th>STACK</th>
+                                <th>MNEMONICO TESA</th>
+                            </tr> 
+                        </thead>
+                        <body>
+                            {% for linea in equipos %}
+                            <tr>
+                                {% if ping %}
+                                    {% if linea.ping %}
+                                        <td class="bi bi-emoji-smile-fill text-success"></td>
+                                    {%else%}
+                                        <td class="bi bi-emoji-frown-fill text-danger"></td>
+                                    {% endif %}
+                                {% endif %}
+                                <td><a href="/ficha_equipo/{{ linea.id }}">{{linea.ip}}</a></td>
+                                <td>{{linea.nombre}}</td>
+                                <td>{{linea.fabricante}}</td>
+                                <td>{{linea.rol}}</td>
+                                <td>{{linea.tipo}}</td>
+                                <td>{{linea.n_serie}}</td>
+                                <td>{{linea.mac}}</td>
+                                <td>{{linea.rack}}</td>
+                                <td>{{ 'SI' if linea.stack else 'NO'}}</td>
+                                <td>{{linea.router}}</td>
+                            </tr>
+                            {% endfor %}
+                        </body>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6 ">
+                        <!-- Informacion del lado Derecho del card-footer -->
+                    </div>
+                    <div class="col-6"> <!-- Nuevo -->
+                        <!-- Añadimos un nuevo equipo a la sede -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a data-bs-toggle="tooltip" title="Añade un nuevo equipo a la sede" class="btn btn-primary btn-sm" href="/add_modi_equipo/0/{{ sede.id }}" role="button">Nuevo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

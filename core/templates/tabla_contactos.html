@@ -1,0 +1,16 @@
+{% extends 'tablas.html' %}
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <td>{{ registro.sede }}</td>
+                    <td>{{ registro.responsable_cirsa}}</td>
+                    <td>{{ registro.persona_contacto_cirsa}}</td>
+                    <td>{{ registro.tel_contacto_cirsa}}</td>
+                    <td>{{ registro.persona_contacto_sala}}</td>
+                    <td>{{ registro.tel_contacto_sala}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+

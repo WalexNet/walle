@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<div class="row">
+    <form action="/auditoria_upload" method="post" enctype="multipart/form-data" class="mt-4">
+
+        <div class="form-floating"> <!-- VERSION -->
+            <input type="text" class="form-control" id="nombre" placeholder="Host Name" name="version" value="" required>
+            <label for="nombre" class="form-label">Version a Actual</label>
+        </div>
+        <div class="mb-3">
+            <label for="fileInput" class="form-label">Subir archivo de configuración (.conf)</label>
+            <input class="form-control" type="file" id="fileInput" name="config_file" accept=".conf" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Subir y Analizar</button>
+
+    </form>
+</div>
+{% endblock %}

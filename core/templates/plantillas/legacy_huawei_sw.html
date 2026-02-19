@@ -1,0 +1,350 @@
+{% extends 'plantillas/plantillas.html' %}
+
+            {% block plantilla %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="badge bg-primary">Plantilla Switch Huawei</span>
+                <pre> <!-- Plantilla -->
+
+system-view
+!
+sysname {{ hostname }}
+
+info-center loghost 10.146.67.20
+!
+vlan batch 22 to 25 29
+!
+authentication-profile name default_authen_profile
+authentication-profile name dot1x_authen_profile
+authentication-profile name mac_authen_profile
+authentication-profile name portal_authen_profile
+authentication-profile name dot1xmac_authen_profile
+authentication-profile name multi_authen_profile
+!
+domain central.cirsa.com admin
+!
+clock timezone Madrid add 01:00:00
+clock daylight-saving-time eu repeating 02:00 last Sunday March 02:00 last Sunday October 01:00
+!
+dhcp enable
+!
+radius-server template default
+!
+hwtacacs-server template cirsa-tacacs
+    hwtacacs-server authentication 10.0.30.80
+    hwtacacs-server authentication 10.152.21.4 secondary
+    hwtacacs-server authorization 10.0.30.80
+    hwtacacs-server authorization 10.152.21.4 secondary
+    hwtacacs-server accounting 10.0.30.80
+    hwtacacs-server accounting 10.152.21.4 secondary
+    hwtacacs-server shared-key cipher *T4c4cs*
+!
+
+quit
+
+
+pki realm default
+    certificate-check none
+!
+acl number 2001
+    rule 10 permit source 10.0.30.231 0
+acl number 2002
+    description "Monitorizacion Azure CheckMK"
+    rule 10 permit source 10.146.67.18 0
+    rule 20 permit source 10.146.67.11 0
+    rule 30 permit source 10.146.67.20 0
+!
+free-rule-template name default_free_rule
+!
+portal-access-profile name portal_access_profile
+!
+
+quit
+
+
+
+aaa
+    authentication-scheme default            
+    authentication-scheme radius
+    authentication-mode radius
+    authentication-scheme authe-cirsa-tacacs
+    authentication-mode hwtacacs local
+    authorization-scheme default
+    authorization-scheme auth-cirsa-tacacs
+    authorization-mode hwtacacs local
+    accounting-scheme default
+    accounting-scheme acco-cirsa-tacacs
+    accounting-mode hwtacacs
+    accounting realtime 3
+    accounting start-fail online
+    local-aaa-user password policy administrator
+    password history record number 0
+    password expire 0
+    domain default
+    authentication-scheme radius
+    radius-server default
+    domain default_admin
+    authentication-scheme default
+    domain central.cirsa.com
+    authentication-scheme authe-cirsa-tacacs
+    accounting-scheme acco-cirsa-tacacs
+    authorization-scheme auth-cirsa-tacacs  
+    radius-server default
+    hwtacacs-server cirsa-tacacs
+
+    local-user admin password irreversible-cipher {{ pass_n2comms }}
+    local-user admin privilege level 15
+    local-user admin service-type terminal http
+
+
+
+quit
+
+!
+interface Vlanif1
+    shutdown
+!
+interface Vlanif22
+    description Comunicaciones
+    ip address {{ ips['ip_vlan22'] }} 255.255.255.0
+    dhcp select relay
+    dhcp relay server-ip 10.3.0.201
+!                                         
+interface Vlanif23
+    description MMVVStreaming
+    ip address {{ ips['ip_vlan23'] }} 255.255.255.0
+    dhcp select relay
+    dhcp relay server-ip 10.3.0.201
+!
+interface Vlanif24
+    description Usuarios
+    ip address {{ ips['ip_vlan24'] }} 255.255.255.0
+    dhcp select relay
+    dhcp relay server-ip 10.3.0.201
+!
+interface Vlanif25
+    description Produccion
+    ip address {{ ips['ip_vlan25'] }} 255.255.255.0
+    dhcp select relay
+    dhcp relay server-ip 10.3.0.201
+!
+interface Vlanif29
+    description Terceros
+    ip address {{ ips['ip_vlan29'] }} 255.255.255.0
+    dhcp select relay
+    dhcp relay server-ip 10.3.0.201
+!                                 
+
+quit
+
+
+ntp-service server disable
+ntp-service ipv6 server disable
+ntp-service source-interface Vlanif22
+ntp-service unicast-server 10.0.10.4
+
+
+
+
+interface GigabitEthernet0/0/1 
+    description Alarma - {{ ips['ip_alar'] }}
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 22
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 22 24
+    stp edged-port enable
+
+interface GigabitEthernet0/0/2
+    description Comunicaciones
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 22
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 22 24
+    stp edged-port enable
+    
+interface GigabitEthernet0/0/3 
+    description Grabador - {{ ips['ip_grab'] }}
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 22
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 22 24
+    stp edged-port enable
+    
+interface GigabitEthernet0/0/4
+    description Comunicaciones
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 22
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 22 24
+    stp edged-port enable
+
+
+!
+interface GigabitEthernet0/0/5
+    description PC Admincion - {{ ips['ip_pc_admicion'] }}
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 24
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 24
+    stp edged-port enable
+!
+interface range GigabitEthernet0/0/6 to GigabitEthernet0/0/12
+    description Usuarios
+    port link-type hybrid                    
+    voice-vlan 23 enable
+    port hybrid pvid vlan 24
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 24
+    stp edged-port enable
+!
+
+
+quit
+
+
+interface GigabitEthernet0/0/13
+    description LMS - {{ ips['ip_lms'] }}
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 25
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 25
+    stp edged-port enable
+!
+interface range GigabitEthernet0/0/14 to GigabitEthernet0/0/18
+    description Produccion
+    port link-type hybrid                    
+    voice-vlan 23 enable
+    port hybrid pvid vlan 25
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 25
+    stp edged-port enable
+!
+
+quit
+
+
+
+interface GigabitEthernet0/0/19
+    description Cajero Intimus - {{ ips['ip_caj'] }}
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 29
+    port hybrid tagged vlan 23               
+    port hybrid untagged vlan 29
+    stp edged-port enable
+!
+interface range GigabitEthernet0/0/20 to GigabitEthernet0/0/22
+    description Terceros
+    port link-type hybrid
+    voice-vlan 23 enable
+    port hybrid pvid vlan 29
+    port hybrid tagged vlan 23
+    port hybrid untagged vlan 29
+    stp edged-port enable
+!
+
+** Trunk a Router Principal
+
+interface GigabitEthernet0/0/23
+    description Conexion router FTTH 100MB/100MB
+    port link-type trunk
+    port trunk pvid vlan 22
+    undo port trunk allow-pass vlan 1
+    port trunk allow-pass vlan 22 to 26 29 900
+!
+
+** Usar solo si hay BackUP, por defecto esta en shutdown
+
+interface GigabitEthernet0/0/24
+    description Conexion router BCK 4G MOVIL 10MB
+    port link-type trunk
+    port trunk pvid vlan 22
+    undo port trunk allow-pass vlan 1
+    port trunk allow-pass vlan 22 to 26 29 900
+    shutdown
+!
+!
+
+quit
+
+
+interface range GigabitEthernet0/0/25 to GigabitEthernet0/0/28
+shutdown
+!
+
+quit
+
+interface NULL0
+quit
+
+!
+undo icmp name timestamp-request receive
+!
+ip route-static 0.0.0.0 0.0.0.0 {{ ip_red }}
+!
+
+
+
+snmp-agent
+snmp-agent local-engineid 800007DB03183D5E5294C0
+snmp-agent sys-info contact n2comms@cirsa.com
+snmp-agent sys-info location {{ location }}
+snmp-agent sys-info version v3
+snmp-agent group v3 CIRSA privacy acl 2002
+snmp-agent target-host trap address udp-domain 10.146.67.18 source Vlanif22 params securityname tobeit v3 privacy
+snmp-agent usm-user v3 tobeit
+snmp-agent usm-user v3 tobeit group CIRSA 
+
+snmp-agent usm-user v3 tobeit authentication-mode sha
+
+********************************
+*** Poner Pass: 6@34Ho4wGJew*
+********************************
+
+
+snmp-agent usm-user v3 tobeit privacy-mode aes128
+
+********************************
+*** Poner Pass: 9yv7c%3w8gZqt
+********************************
+
+
+snmp-agent usm-user v3 tobeit acl 2002
+snmp-agent trap source Vlanif22
+snmp-agent trap enable
+!
+
+********************************
+*** Confirmar con: Y
+********************************
+
+stelnet ipv4 server enable
+stelnet ipv6 server enable
+!
+
+user-interface con 0
+    authentication-mode password
+    set authentication password cipher {{ pass_n2comms }}
+    idle-timeout 30 0
+user-interface vty 0 4
+    authentication-mode aaa
+    idle-timeout 30 0
+    protocol inbound all
+user-interface vty 16 20
+!
+dot1x-access-profile name dot1x_access_profile
+!
+mac-access-profile name mac_access_profile
+!
+
+                    
+
+                </pre>
+            </div>
+            {% endblock %}
+

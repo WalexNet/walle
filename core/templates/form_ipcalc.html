@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block cuerpo %}
+<div class="row g-1">
+    <form action="/ipcalc" method="post">
+        <div class="card" > <!-- Datos Equipo -->
+            <div class="card-header">
+                IP-Calc
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-8 mb-3"> <!-- IP - RED -->
+                        <label for="ip_red" class="form-label">IP / CIDR</label>
+                        <input type="text" class="form-control" id="ip_red" placeholder="10.10.36.0/24"
+                        pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\/(?:3[0-2]|[12]?[0-9]))?$" name="ip_red" required>
+                    </div>
+                    <div class="col-4 mb-3"> <!-- CIDR - SubNet -->
+                        <label for="cidr_sn" class="form-label">CIDR-SubNet</label>
+                        <input  type="text" class="form-control" id="cidr_sn" placeholder="Nº de CIDR Para subnet" name="cidr_sn">
+                    </div>
+                </div>
+
+                {% if resultado %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="badge bg-primary">Calculo de la Red y Sub-Neteo</span>
+                    <pre>{{resultado}}</pre>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="card-footer"> <!-- Botones -->
+                <div class="row">
+                    <div class="col-6">
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button type="submit" class="btn btn-success btn-sm">IP-CALC</button>
+                            <div class="d-grid gap-2 d-md-flex">
+                                <a class="btn btn-outline-success btn-sm" href="/home" role="button">Salir</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'tablas.html' %}
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <td>
+                        <a href="/ficha_equipo/{{registro.id}}">{{ registro.ip }}</a>
+                    </td>
+                    <td>{{ registro.nombre}}</td>
+                    <td>{{ registro.estado_cirsa}}</td>
+                    <td>{{ registro.fabricante}}</td>
+                    <td>{{ registro.modelo}}</td>
+                    <td>{{ registro.rol}}</td>
+                    <td>{{ registro.sede}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+ 

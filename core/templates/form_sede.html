@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+    <div class="row g-1">
+        <form action="{{ form_action }}" method="post">
+            <div class="card" >
+                <div class="card-header">
+                    Datos Principales de la sede
+                </div>
+                <div class="card-body">
+                    <div class="row g-1">
+                        <div class="col-2 form-floating"> <!-- COD_SEDE -->
+                            <input type="text" class="form-control form-control-sm" id="codsede" placeholder="codigo de sede" name="cod_sede" value="{{sede.cod_sede}}">
+                            <label for="codsede">Codigo Sede</label>
+                        </div>
+                        <div class="col-3 form-floating"> <!-- NOMBRE -->
+                            <input type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre de la sede" name="nombre" value="{{sede.sede}}">
+                            <label for="nombre">Nombre</label>
+                        </div>
+                        <div class="col-3 form-floating"> <!-- EMPRESA -->
+                            <input type="text" class="form-control form-control-sm" id="empresa" placeholder="Nombre de la Empresa" name="empresa" value="{{sede.empresa}}">
+                            <label for="empresa" class="form-label">Empresa</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- CIF -->
+                            <input type="text" class="form-control form-control-sm" id="cif" placeholder="CIF de la Empresa" name="cif" value="{{sede.cif}}">
+                            <label for="cif" class="form-label">CIF</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- CECO -->
+                            <input type="text" class="form-control form-control-sm" id="ceco" placeholder="Código CECO" name="ceco" value="{{sede.ceco}}">
+                            <label for="ceco" class="form-label">CECO</label>
+                        </div>
+
+                        <div class="col-6 form-floating"> <!-- DIRECCION -->
+                            <input type="text" class="form-control form-control-sm" id="direccion" placeholder="Direción de la sede" name="direccion" value="{{sede.direccion}}">
+                            <label for="direccion" class="form-label">Dirección</label>
+                        </div>
+                        <div class="col-3 form-floating"> <!-- COOR_LAT -->
+                            <input type="text" class="form-control" id="coor_lat" placeholder="08222" name="coor_lat" value="{{sede.coor_lat}}">
+                            <label for="coor_lat" class="form-label">Coordenada Latitud</label>
+                        </div>
+                        <div class="col-3 form-floating"> <!-- COOR_LONG -->
+                            <input type="text" class="form-control" id="coor_long" placeholder="08222" name="coor_long" value="{{sede.coor_long}}">
+                            <label for="coor_long" class="form-label">Coordenada Longitud</label>
+                        </div>
+
+                        <!-- Selects -->
+
+                        <div class="col-4 form-floating"> <!-- DIVISION -->
+                            <select name="id_div" class="form-select" id="division" aria-label="Floating label select">
+                                <option value="{{sede.id_div}}" selected>{{sede.division}}</option>
+                                {% for reg_division in division %}
+                                <option value="{{ reg_division.id }}">{{ reg_division.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="division">División de la Sede</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- CIRCUITO -->
+                            <select name="id_circuito" class="form-select" id="circuito" aria-label="Floating label select">
+                                <option value="{{sede.id_circuito}}" selected>{{sede.circuito}}</option>
+                                {% for reg_circuito in circuito %}
+                                <option value="{{ reg_circuito.id }}">{{ reg_circuito.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="circuito">Circuito</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- PROVINCIA -->
+                            <select name="id_prov" class="form-select" id="provincia" aria-label="Floating label select">
+                                <option value="{{sede.id_prov}}" selected>{{sede.prov}}</option>
+                                {% for reg_provincia in provincia %}
+                                <option value="{{ reg_provincia.id }}">{{ reg_provincia.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="circuito">Provincia</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- POBLACION -->
+                            <select name="id_pob" class="form-select" id="poblacion" aria-label="Floating label select">
+                                <option value="{{sede.id_pob}}" selected>{{sede.pob}}</option>
+                                {% for reg_poblacion in poblacion %}
+                                <option value="{{ reg_poblacion.id }}">{{ reg_poblacion.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="poblacion">Población</label>
+                        </div>
+                        <div class="col-2 form-floating"> <!-- TOPOLOGIA -->
+                            <select name="id_topologia" class="form-select" id="topologia" aria-label="Floating label select">
+                                <option value="{{sede.id_topologia}}" selected>{{sede.topo}}</option>
+                                {% for reg_topo in topologia %}
+                                <option value="{{ reg_topo.id }}">{{ reg_topo.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="poblacion">Topología</label>
+                        </div>
+
+                        <!-- Fin Select's -->
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                                <div class="d-grid gap-2 d-md-flex">
+                                    <a class="btn btn-outline-success btn-sm" 
+                                    {% if id_sede == 0 %}
+                                    href= "/"  
+                                    {% else %}
+                                    href= "/ficha_sede/{{ id_sede }}"
+                                    {%endif%}
+                                    role="button">Salir</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Reservado -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

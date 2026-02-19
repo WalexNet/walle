@@ -1,0 +1,17 @@
+{% extends 'tablas.html' %}
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <td>
+                        <a href="/ficha_sede/{{registro.id}}">{{ registro.cod_sede }}</a>
+                    </td>
+                    <td>{{ registro.sede}}</td>
+                    <td>{{ registro.direccion}}</td>
+                    <td>{{ registro.prov}}</td>
+                    <td>{{ registro.pob}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+ 

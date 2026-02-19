@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+        <!-- Paginador -->
+        {% block paginador %}
+        <div class="col-6">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-sm justify-content-end">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Página {{paginacion.pagina_actual}} de {{paginacion.total_paginas}}</a>
+                    </li>
+
+                    {% if paginacion.pagina_actual > 1 and paginacion.pagina_actual <= paginacion.total_paginas %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&busqueda={{busqueda}}&buscar_por={{buscar_por}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="?page={{paginacion.pagina_actual-1}}&busqueda={{busqueda}}&buscar_por={{buscar_por}}">{{paginacion.pagina_actual-1}}</a></li>
+                    {% endif %}
+                    
+                    <li class="page-item"><a class="page-link" href="?page={{paginacion.pagina_actual}}&busqueda={{busqueda}}&buscar_por={{buscar_por}}">{{paginacion.pagina_actual}}</a></li>
+
+                    {% if paginacion.pagina_actual < paginacion.total_paginas %}
+                        <li class="page-item"><a class="page-link" href="?page={{paginacion.pagina_actual+1}}&busqueda={{busqueda}}&buscar_por={{buscar_por}}">{{paginacion.pagina_actual+1}}</a></li>
+                    {% endif %}
+                    
+
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{paginacion.total_paginas}}&busqueda={{busqueda}}&buscar_por={{buscar_por}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        {% endblock %}
+
+{% block cuerpo %}
+
+    <div class="row">
+        <!-- Tabla -->
+        <div class="col">
+            <table class="table table-sm table-hover align-middle">
+                <thead class='bg-info-subtle' >
+                    <tr>
+                        {% for campo in encabezado %}
+                            <th>{{ campo|upper }}</th>
+                        {% endfor %}
+                    </tr> 
+                </thead>
+
+                {% block tabla_cuerpo %}
+                {% endblock %}
+
+            </table>
+        </div> 
+        <p>Cantidad de registros: {{paginacion.total_registros}}</p> 
+    </div>
+
+{% endblock %}

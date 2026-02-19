@@ -1,0 +1,16 @@
+{% extends 'tablas.html' %}
+            {% block tabla_cuerpo %}
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <th scope="row">{{ registro.admin }}</th>
+                    <td>{{ registro.sede}}</td>
+                    <td>{{ registro.tel_router}}</td>
+                    <td>{{ registro.tipo_circuito}}</td>
+                    <td>{{ registro.rol}}</td>
+                    <td>{{ registro.bw}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endblock %}
+ 

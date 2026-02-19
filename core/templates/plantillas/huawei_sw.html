@@ -1,0 +1,306 @@
+{% extends 'plantillas/plantillas.html' %}
+
+            {% block plantilla %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="badge bg-primary">Plantilla Switch Huawei</span>
+                <pre> <!-- Plantilla -->
+
+system-view
+!
+sysname {{ hostname }}
+!
+clock timezone Brussels,Copenhagen,Madrid,Paris add 01:00:00
+!
+info-center source default channel 2 log state on
+info-center loghost 10.146.67.20 channel 2 trap level notifications
+!
+vlan batch 10 20 30 40 50 60 70 80 90 99 to 100
+!
+!
+http server-source all-interface
+YES
+!
+clock timezone Madrid add 01:00:00
+!
+dhcp enable
+!
+!
+acl number 2001
+ rule 10 permit source 10.0.30.231 0
+acl number 2002
+description "Monitorizacion Azure CheckMK"
+rule 10 permit source 10.146.67.18 0
+rule 20 permit source 10.146.67.11 0
+rule 30 permit source 10.146.67.20 0
+!
+!
+hwtacacs-server template cirsa-tacacs
+hwtacacs-server authentication 10.3.0.24
+hwtacacs-server authorization 10.3.0.24
+hwtacacs-server accounting 10.3.0.24
+hwtacacs-server authentication 10.3.0.25 49 secondary
+hwtacacs-server authorization 10.3.0.25 49 secondary
+hwtacacs-server accounting 10.3.0.25 49 secondary
+hwtacacs-server shared-key cipher *T4c4cs*
+aaa
+authentication-scheme authe-cirsa-tacacs
+authentication-mode hwtacacs local
+quit
+!
+authorization-scheme auth-cirsa-tacacs
+authorization-mode hwtacacs local
+quit
+!
+accounting-scheme acco-cirsa-tacacs
+accounting-mode hwtacacs
+accounting realtime 3
+accounting start-fail online
+quit
+!
+domain central.cirsa.com
+authentication-scheme authe-cirsa-tacacs
+authorization-scheme auth-cirsa-tacacs
+accounting-scheme acco-cirsa-tacacs
+hwtacacs-server cirsa-tacacs
+quit
+!
+domain central.cirsa.com admin
+!
+aaa
+local-aaa-user password policy administrator
+password alert original
+!
+quit
+undo local-aaa-user wrong-password
+y
+local-user n2comms privilege level 15
+local-user n2comms password irreversible-cipher {{ pass_n2comms }}
+local-user n2comms service-type ssh http
+!
+
+**********************
+Configuramos las vlans
+**********************
+
+vlan 10
+name Red_Transito_WAN
+!
+vlan 20
+name Red_Transito_INET
+!
+vlan 30
+name Coms_Mgmt
+!
+vlan 40
+name Seguridad
+!
+vlan 50
+name Legacy_VoIP
+!
+vlan 60
+name Corporativa_Eth
+!
+vlan 70
+name Proveedores
+!
+vlan 80
+name Clientes
+!
+vlan 90
+name Corporativa_Wifi
+!
+vlan 99
+name Nativa
+!
+vlan 100
+name Forward_Systems
+!
+interface Vlanif1
+shutdown
+!
+interface Vlanif30
+description Gestion Mgmt
+ip address {{ ips['ip_mgmt'] }} 255.255.255.224
+ dhcp select relay
+ dhcp relay server-ip 10.3.0.201
+!
+
+
+
+
+ntp-service server disable
+ntp-service ipv6 server disable
+ntp-service source-interface Vlanif30
+ntp-service unicast-server 10.0.20.10
+!
+
+************************
+Configuracion de Puertos
+************************
+
+
+interface Eth-Trunk1
+description Port-channel FortiAP
+port link-type trunk
+port trunk pvid vlan 30
+port trunk allow-pass vlan 30 80 90
+mode lacp
+!
+interface GigabitEthernet0/0/1
+description Router FTTH VPN-IP
+port link-type access
+port default vlan 10
+undo shutdown
+!
+quit
+interface GigabitEthernet0/0/2
+description Router Backup Teldat 4G
+port link-type access
+port default vlan 10
+undo shutdown
+!
+quit
+interface GigabitEthernet0/0/3
+description Router INET
+port link-type access
+port default vlan 20
+shutdown
+!
+quit
+interface GigabitEthernet0/0/4
+description Trunk To Microtik PPAL {{ ips['ip_mikrotik_PPAL'] }}
+port link-type trunk
+port trunk pvid vlan 99
+port trunk allow-pass vlan 10 20 30 40 50 60 70 80 90 100
+undo shutdown
+!
+quit
+interface GigabitEthernet0/0/5
+description Trunk To Microtik BCKP {{ ips['ip_mikrotik_BCKP'] }}
+port link-type trunk
+port trunk pvid vlan 99
+port trunk allow-pass vlan 10 20 30 40 50 60 70 80 90 100
+undo shutdown
+!
+quit
+interface GigabitEthernet0/0/6
+description FortiAP - Poe
+port link-type trunk
+port trunk pvid vlan 30
+port trunk allow-pass vlan 30 80 90
+undo shutdown
+!
+quit
+interface GigabitEthernet0/0/7
+description FortiAP
+port link-type trunk
+port trunk pvid vlan 30
+port trunk allow-pass vlan 30 80 90
+shutdown
+!
+quit
+interface range GigabitEthernet0/0/8 to GigabitEthernet0/0/10
+description Seguridad
+port link-type access
+port default vlan 40
+shutdown
+!
+quit
+interface range GigabitEthernet0/0/11 to GigabitEthernet0/0/14
+description Usuarios+Voip
+port link-type hybrid
+voice-vlan 50 enable
+port hybrid pvid vlan 60
+port hybrid tagged vlan 50
+port hybrid untagged vlan 60
+stp edged-port enable
+shutdown
+!
+quit
+interface range GigabitEthernet0/0/15 to GigabitEthernet0/0/21
+description Proveedores
+port link-type access
+port default vlan 70
+shutdown
+!
+quit
+clear configuration interface GigabitEthernet0/0/20
+y
+interface GigabitEthernet0/0/20
+description Cajero - {{ ips['ip_cajero'] }}
+port link-type access
+port default vlan 70
+undo shutdown
+!
+interface GigabitEthernet0/0/22
+description TPV - {{ ips['ip_TPV'] }}
+port link-type access
+port default vlan 100
+undo shutdown
+!
+interface GigabitEthernet0/0/23
+description PC Display - {{ ips['ip_PC_Display'] }}
+port link-type access
+port default vlan 100
+undo shutdown
+!
+interface GigabitEthernet0/0/24
+description LMS - FordwareSystem - {{ ips['ip_LMS'] }}
+port link-type access
+port default vlan 100
+undo shutdown
+!
+interface range GigabitEthernet0/0/25 to GigabitEthernet0/0/28
+description Puertos - SFP
+shutdown
+quit
+!
+undo icmp name timestamp-request receive
+!
+ip route-static 0.0.0.0 0.0.0.0 {{ ips['ip_ruta_statica'] }}
+!
+snmp-agent
+snmp-agent group v3 CIRSA privacy acl 2002
+snmp-agent usm-user v3 tobeit acl 2002 group CIRSA
+snmp-agent usm-user v3 tobeit authentication-mode sha
+6@34Ho4wGJew*
+6@34Ho4wGJew*
+snmp-agent usm-user v3 tobeit privacy-mode aes128
+9yv7c%3w8gZqt
+9yv7c%3w8gZqt
+snmp-agent sys-info location {{ location }}
+snmp-agent sys-info contact n2comms@cirsa.com
+snmp-agent trap source Vlanif30
+snmp-agent trap enable
+Y
+snmp-agent target-host trap address udp-domain 10.146.67.18 source Vlanif30 params securityname tobeit v3 privacy
+snmp-agent protocol source-status all-interface
+snmp-agent protocol source-status ipv6 all-interface
+!
+stelnet ipv4 server enable
+ssh user admin
+ssh authentication-type default password
+ssh server-source all-interface
+!
+!
+user-interface con 0
+ authentication-mode password
+set authentication password cipher {{ pass_n2comms }}
+Admin@huawei.com
+{{ pass_n2comms }}
+{{ pass_n2comms }}
+ idle-timeout 30 0
+user-interface vty 0 4
+ authentication-mode aaa
+ idle-timeout 30 0
+user-interface vty 16 20
+!
+ops
+!
+return
+0
+
+                </pre>
+            </div>
+            {% endblock %}
+
