@@ -1,7 +1,7 @@
-/__pycache__
+__pycache__/
 config.ini
-/.git
-/db
-/env_marte
-/.vscode
+.git/
+db/
+env_marte/
+.vscode/
 
