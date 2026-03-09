@@ -3,7 +3,7 @@ import subprocess
 from netmiko import ConnectHandler
 from netmiko.exceptions import NetMikoTimeoutException, NetMikoAuthenticationException
 from tacacs_plus.client import TACACSClient
-import time
+import platform
 import configparser
 from core.models.modelos import *
 from flask import request
@@ -46,13 +46,38 @@ def pag_busqueda(tot):
     }
     return datos
 
+
 def check_ping(hostname):
+    # Detectar sistema operativo
+    param = "-n" if platform.system().lower() == "windows" else "-c"
+    
     try:
-        result = subprocess.run(["ping", "-n", "1", hostname], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-        res = result.stdout.split('\n')
-        return (False, 'TTL expirado') if 'TTL expirado' in res[2] else (True, result.stdout)
-    except subprocess.CalledProcessError:
-        return (False, 'Ping Failed')
+        result = subprocess.run(
+            ["ping", param, "1", hostname],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        output = result.stdout.lower()
+
+        # Interpretación multiplataforma
+        if "ttl" in output:  # TTL aparece tanto en Windows como Linux si hay respuesta
+            return (True, result.stdout)
+
+        # Mensajes comunes de fallo
+        if "tiempo de espera agotado" in output or "timeout" in output:
+            return (False, "Timeout")
+
+        if "host unreachable" in output or "inaccesible" in output:
+            return (False, "Host unreachable")
+
+        return (False, "Ping Failed")
+
+    except Exception as e:
+        return (False, str(e))
+
+
 
 def netmiko_comando(host, comando, usuario, password, tipo_dispositivo):
     """
@@ -137,83 +162,6 @@ def pines(lista_equipos):
     for equipo in lista_equipos:
         equipo.ping = check_ping(equipo.ip)[0]
     return lista_equipos
-
-
-# Control de tareas
-def obtener_siguiente_tecnico():
-    """
-    Selecciona el técnico con menor carga de trabajo.
-    No considera técnicos de vacaciones.
-    Cuenta solo tareas activas (Pendiente, En Progreso, Reabierta).
-    Implementa 'Saltar Turno' usando el flag no_disponible.
-    """
-
-    estados_activos = ['Pendiente', 'En Progreso', 'Reabierta']
-
-    consulta = db.session.query(
-        Tecnico,
-        func.count(
-            case(
-                (Tarea.estado.in_(estados_activos), 1),
-                else_=None
-            )
-        ).label('conteo_tareas')
-    ).outerjoin(Tarea, Tarea.tecnico_id == Tecnico.id).filter(
-        Tecnico.activo == True,
-        Tecnico.de_vacaciones == False).group_by(
-        Tecnico.id).order_by(
-        'conteo_tareas',
-        Tecnico.id
-    )
-
-    resultados = consulta.all()
-
-    # Si no hay técnicos (caso extremo)
-    if not resultados:
-        return db.session.query(Tecnico).filter(
-            Tecnico.activo == True,
-            Tecnico.de_vacaciones == False
-        ).order_by(Tecnico.id).first()
-
-    # Primer candidato
-    candidato_principal, carga_principal = resultados[0]
-
-    if candidato_principal.no_disponible:
-        # Desmarcar el salto
-        candidato_principal.no_disponible = False
-        db.session.commit()
-
-        # Seleccionar al siguiente si existe
-        if len(resultados) > 1:
-            return resultados[1][0]
-
-        # Si solo hay uno, no hay más que asignar
-        return candidato_principal
-
-    # Si está disponible, retorna el primero
-    return candidato_principal
-
-def obtener_tecnicos_con_carga():
-    estados_activos = ['Pendiente', 'En Progreso', 'Reabierta']
- 
-    consulta = db.session.query(
-        Tecnico, 
-        func.count(
-            case(
-                (Tarea.estado.in_(estados_activos), Tarea.id),
-                else_=None
-            )
-        ).label('conteo_tareas')
-    ).outerjoin(Tarea, Tarea.tecnico_id == Tecnico.id) \
-     .filter(
-        Tecnico.activo == True
-    ).group_by(
-        Tecnico.id
-    ).order_by(
-        'conteo_tareas',   
-        Tecnico.id
-    )
-    return consulta.all()
 
 
 # Devuelve una lista. linea a linea

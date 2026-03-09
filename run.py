@@ -1,7 +1,7 @@
 ﻿import os  
 from core import app, db
 from datetime import datetime
-from core.funciones import paginacion, check_ping, pag_busqueda, obtener_siguiente_tecnico, obtener_tecnicos_con_carga
+from core.funciones import paginacion, check_ping, pag_busqueda
 from core.funciones import pines, ports, tacacs_authentication
 from core.shutdownPort import shutdown_port_administrativamente
 from flask import render_template, request, redirect, url_for, session, flash
@@ -371,125 +371,6 @@ def busqueda(find):
         
     return render_template('res_busqueda.html', paginacion=datos, breadcrumb_items=items, datos=listado, encabezado=campos, busqueda=cadena, buscar_por=find)
 
-
-
-
-# Asignacion y cierre de tareas
-@app.route('/asignacion_tareas', methods=['GET'])
-def asignacion_tareas():
-    if not session.get("autenticado"):
-        return redirect(url_for("login"))
-    
-    # 1. Obtener el técnico sugerido (el de menor carga)
-    siguiente_tecnico = obtener_siguiente_tecnico()
-    
-    # 2. Obtener la lista completa de técnicos CON SU CONTEO DE TAREAS
-    # Devuelve una lista de tuplas [(Tecnico_obj, conteo), ...]
-    tecnicos_con_carga = obtener_tecnicos_con_carga() 
-
-    # 3. Obtener historial reciente
-    ultimas_tareas = Tarea.query.order_by(Tarea.fecha_creacion.desc()).limit(10).all()
-    # No olvides inyectar el nombre del técnico para el template
-    for tarea in ultimas_tareas:
-        tarea.tecnico_nombre = tarea.tecnico.nombre # Asume que el backref 'tecnico' funciona
-
-    breadcrumb_items = ['Inicio', 'Tareas', 'Asignación por Carga']
-
-    return render_template('asignacion_tareas.html', 
-                            siguiente_tecnico=siguiente_tecnico,
-                            tecnicos_con_carga=tecnicos_con_carga,
-                            ultimas_tareas=ultimas_tareas,
-                            breadcrumb_items=breadcrumb_items)
-
-@app.route('/crear_tarea', methods=['POST'])
-def crear_tarea():
-    # Recogemos datos del formulario
-    titulo = request.form.get('titulo')
-    descripcion = request.form.get('descripcion')
-    prioridad = request.form.get('prioridad')
-    tecnico_id = request.form.get('id_tecnico') # Viene del input hidden
-
-    # Validación básica
-    if not titulo or not tecnico_id:
-        flash("Faltan datos obligatorios", "warning")
-        return redirect(url_for('asignacion_tareas'))
-
-    # Crear y guardar en DB
-    nueva_tarea = Tarea(
-        titulo=titulo,
-        descripcion=descripcion,
-        prioridad=prioridad,
-        tecnico_id=int(tecnico_id)
-    )
-    
-    db.session.add(nueva_tarea)
-    db.session.commit()
-    
-    # Mensaje de éxito
-    tecnico_asignado = Tecnico.query.get(tecnico_id)
-    flash(f"Tarea asignada correctamente a {tecnico_asignado.nombre}", "success")
-    
-    return redirect(url_for('asignacion_tareas'))
-
-@app.route('/tecnico/<int:tecnico_id>/alternar_vacaciones', methods=['POST'])
-def alternar_vacaciones(tecnico_id):
-    if not session.get("autenticado"): return redirect(url_for('login'))
-
-    tecnico = Tecnico.query.get_or_404(tecnico_id)
-    
-    tecnico.de_vacaciones = not tecnico.de_vacaciones
-    db.session.commit()
-    
-    estado = "DE VACACIONES 🌴 (Fuera de Cola)" if tecnico.de_vacaciones else "Disponible"
-    flash(f"El estado de '{tecnico.nombre}' ha cambiado a **{estado}**.", "warning")
-    
-    return redirect(url_for('asignacion_tareas'))
-
-@app.route('/tecnico/<int:tecnico_id>/saltar_turno', methods=['POST'])
-def saltar_turno(tecnico_id):
-    if not session.get("autenticado"): return redirect(url_for('login'))
-
-    tecnico = Tecnico.query.get_or_404(tecnico_id)
-    
-    # Solo marcamos como no disponible, la lógica de asignación lo desmarca después
-    if tecnico.no_disponible:
-        # Si ya estaba marcado, lo desmarcamos para que pueda ser elegido.
-        tecnico.no_disponible = False
-        flash(f"'{tecnico.nombre}' ha sido reactivado en la cola.", "info")
-    else:
-        # Lo marcamos para que sea saltado en la próxima asignación
-        tecnico.no_disponible = True
-        flash(f"'{tecnico.nombre}' será saltado en la próxima asignación de tarea.", "warning")
-
-    db.session.commit()
-    return redirect(url_for('asignacion_tareas'))
-
-@app.route('/tarea/<int:tarea_id>/cerrar', methods=['POST'])
-def cerrar_tarea(tarea_id):
-    if not session.get("autenticado"):
-        flash("Acceso denegado.", "danger")
-        return redirect(url_for('login'))
-
-    tarea = Tarea.query.get_or_404(tarea_id)
-    
-    if tarea.estado == 'Cerrada':
-        flash(f"La tarea #{tarea.id} ('{tarea.titulo}') ya estaba cerrada.", "info")
-        return redirect(url_for('asignacion_tareas'))
-        
-    try:
-        tarea.estado = 'Cerrada'
-        db.session.commit()
-        
-        # Una vez cerrada, su carga baja. Informamos al usuario.
-        flash(f"✅ Tarea #{tarea.id} ('{tarea.titulo}') ha sido marcada como CERRADA.", "success")
-        
-    except Exception as e:
-        db.session.rollback()
-        flash(f"❌ Error al intentar cerrar la tarea: {str(e)}", "danger")
-
-    return redirect(url_for('asignacion_tareas'))
-
-# FIN - Asignacion y cierre de tareas
 
 
 # Fichas y Forms

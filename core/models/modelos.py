@@ -418,42 +418,6 @@ class Comment(db.Model):
     post = db.relationship("Post", back_populates="comments")
     user = db.relationship("User", back_populates="comments")
 
-# Tareas de tecnicos
-class Tecnico(db.Model):
-    __tablename__ = 'tecnicos'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=True) # Opcional, para notificaciones
-    activo = db.Column(db.Boolean, default=True)     # Por si alguien está de vacaciones
-    orden_rotacion = db.Column(db.Integer, nullable=False, default=0)
-    de_vacaciones = db.Column(db.Boolean, default=False)
-    no_disponible = db.Column(db.Boolean, default=False)
-    
-    # Relación para acceder a las tareas de este técnico fácilmente
-    tareas = db.relationship('Tarea', backref='tecnico', lazy=True)
-
-    def __repr__(self):
-        return f'<Tecnico {self.nombre}>'
-
-class Tarea(db.Model):
-    __tablename__ = 'tareas'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(200), nullable=False)
-    descripcion = db.Column(db.Text, nullable=True)
-    prioridad = db.Column(db.String(20), default='Media') # Baja, Media, Alta, Critica
-    estado = db.Column(db.String(20), default='Pendiente') # Pendiente, En Progreso, Cerrada
-    
-    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # Clave foránea que vincula la tarea al técnico
-    tecnico_id = db.Column(db.Integer, db.ForeignKey('tecnicos.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<Tarea {self.titulo}>'
-
-# ************************
 
 def all_paginated(tabla, page=1, per_page=20):
     return tabla.query.paginate(page=page, per_page=per_page, error_out=False).items
