@@ -49,11 +49,11 @@ def pag_busqueda(tot):
 
 def check_ping(hostname):
     # Detectar sistema operativo
-    param = "-n" if platform.system().lower() == "windows" else "-c"
-    
+    com_param = ("ping","-n") if platform.system().lower() == "windows" else ("/usr/bin/ping","-c")
+    print(com_param)
     try:
         result = subprocess.run(
-            ["ping", param, "1", hostname],
+            [com_param[0], com_param[1], "1", hostname],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True
